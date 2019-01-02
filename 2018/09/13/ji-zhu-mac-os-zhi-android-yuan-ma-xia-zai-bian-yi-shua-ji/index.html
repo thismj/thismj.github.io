@@ -1,0 +1,980 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Mac OS之Android源码下载、编译、刷机, ThisMJ">
+    <meta name="description" content="软硬件环境
+系统版本：Mac OS High Sierra 10.13.2 (17C88)
+刷机硬件：Nexus 6
+AOSP分支：android-7.1.1_r57（NGI77B）
+
+搭建Mac编译环境通过shell使用以下命令创建大小写">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Mac OS之Android源码下载、编译、刷机 | ThisMJ</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+</head>
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="container">
+            <div class="nav-wrapper">
+                <div class="brand-logo">
+                    <a href="/" class="waves-effect waves-light">
+                        
+                        <img src="/medias/logo.png" class="logo-img hide-on-small-only">
+                        
+                        <span class="logo-span">ThisMJ</span>
+                    </a>
+                </div>
+                <a href="#" data-activates="mobile-nav" class="button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li>
+        <a id="toggleSearch" class="waves-effect waves-light">
+            <i id="searchIcon" class="mdi-action-search"></i>
+        </a>
+    </li>
+
+</ul>
+
+<div class="side-nav" id="mobile-nav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">ThisMJ</div>
+        <div class="logo-desc">
+            
+            不忘初心，砥砺前行
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        
+    </ul>
+
+    <div class="social-link"><a href="https://github.com/thismj" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+    <i class="fa fa-github"></i>
+</a>
+<a href="mailto:thiscrazymj@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+    <i class="fa fa-envelope-open"></i>
+</a>
+
+<a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+    <i class="fa fa-rss"></i>
+</a>
+</div>
+</div>
+
+            </div>
+        </div>
+
+        
+    </nav>
+</header>
+
+
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('嘿嘿嘿嘿，你知道密码不？')).toString(CryptoJS.enc.Hex)) {
+                alert('输得啥玩意儿。。。');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover post-cover" style="background-image: url('/medias/images/2018-09-13.jpeg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        Mac OS之Android源码下载、编译、刷机
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1,
+    #articleContent h2,
+    #articleContent h3,
+    #articleContent h4,
+    #articleContent h5,
+    #articleContent h6 {
+        padding-top: 76px;
+        margin-top: -76px;
+    }
+
+    #articleContent h1 {
+        line-height: 3.5rem;
+    }
+
+    #articleContent h2 {
+        line-height: 3.2rem;
+    }
+
+    #articleContent h3 {
+        line-height: 2.8rem;
+    }
+
+    #articleContent h4 {
+        line-height: 2.5rem;
+    }
+
+    #articleContent h5 {
+        line-height: 2.2rem;
+    }
+
+    #articleContent h6 {
+        line-height: 1.9rem;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+</style>
+<div class="row">
+    <div class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            
+            <div class="article-tag">
+                
+                <a href="/tags/AOSP/" target="_blank">
+                    <span class="chip bg-color">AOSP</span>
+                </a>
+                
+            </div>
+            
+            <div class="post-info">
+                
+                <span class="post-cate">
+                    <i class="fa fa-bookmark fa-fw icon-category"></i>
+                    
+                    <a href="/categories/Android/" class="post-category" target="_blank">
+                        Android
+                    </a>
+                    
+                </span>
+                
+
+                <span class="post-date">
+                    <i class="fa fa-clock-o fa-fw"></i>2018-09-13
+                </span>
+            </div>
+        </div>
+        <hr>
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="软硬件环境"><a href="#软硬件环境" class="headerlink" title="软硬件环境"></a>软硬件环境</h2><ul>
+<li>系统版本：Mac OS High Sierra 10.13.2 (17C88)</li>
+<li>刷机硬件：Nexus 6</li>
+<li>AOSP分支：android-7.1.1_r57（NGI77B）</li>
+</ul>
+<h2 id="搭建Mac编译环境"><a href="#搭建Mac编译环境" class="headerlink" title="搭建Mac编译环境"></a>搭建Mac编译环境</h2><p>通过shell使用以下命令创建大小写敏感的稀疏磁盘映像（官网写的40g是远远不够的）:</p>
+<pre class=" language-bash"><code class="language-bash">hdiutil create -type SPARSE -fs <span class="token string">'Case-sensitive Journaled HFS+'</span> -size 150g ~/android.dmg
+</code></pre>
+<p>在~/.bash_profile添加以下两个辅助函数，记得source一下：</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 装载Android磁盘映像</span>
+mountAndroid<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> hdiutil attach ~/android.dmg.sparseimage -mountpoint /Volumes/android<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true"># 卸载Android磁盘映像</span>
+umountAndroid<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> hdiutil detach /Volumes/android<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+</code></pre>
+<p>安装 Xcode 软件，可以选择 8.3.3 版本，安装最新的 9.x 后面编译会有问题。<br>安装 Xcode 命令行工具：</p>
+<pre class=" language-bash"><code class="language-bash">xcode-select --install
+</code></pre>
+<p>安装<a href="https://www.macports.org/install.php" target="_blank" rel="noopener">MacPorts</a>，确保 /opt/local/bin 在路径中显示在 /usr/bin 前面：</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">export</span> PATH<span class="token operator">=</span>/opt/local/bin:<span class="token variable">$PATH</span>
+</code></pre>
+<p>通过 MacPorts 获取 Make、Git 和 GPG 软件包：</p>
+<pre class=" language-bash"><code class="language-bash">POSIXLY_CORRECT<span class="token operator">=</span>1 <span class="token function">sudo</span> port <span class="token function">install</span> gmake libsdl <span class="token function">git</span> gnupg
+</code></pre>
+<p>然后设置文件描述符数量上限：</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">ulimit</span> -S -n 1024
+</code></pre>
+<h2 id="下载AOSP-Android-Open-Source-Project"><a href="#下载AOSP-Android-Open-Source-Project" class="headerlink" title="下载AOSP(Android Open Source Project)"></a>下载AOSP(Android Open Source Project)</h2><p>装载Android磁盘映像：</p>
+<pre class=" language-bash"><code class="language-bash">mountAndroid
+</code></pre>
+<p>安装配置repo，并初始化repo项目：</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">cd</span> ~
+<span class="token function">mkdir</span> ~/bin
+<span class="token function">export</span> PATH<span class="token operator">=</span>~/bin:<span class="token variable">$PATH</span>
+
+curl https://storage.googleapis.com/git-repo-downloads/repo <span class="token operator">></span> ~/bin/repo
+<span class="token function">chmod</span> a+x ~/bin/repo
+
+<span class="token function">cd</span> /Volumes/android
+<span class="token function">mkdir</span> AOSP
+<span class="token function">cd</span> AOSP
+<span class="token function">git</span> config --global user.name <span class="token string">"Heyruad.Towne"</span>
+<span class="token function">git</span> config --global user.email <span class="token string">"Heyruad.Towne@gmail.com"</span>
+
+<span class="token comment" spellcheck="true">#可以翻墙（Google）</span>
+repo init -u https://android.googlesource.com/platform/manifest -b android-7.1.1_r57
+<span class="token comment" spellcheck="true">#翻不了墙（清华AOSP镜像）</span>
+repo init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest -b android-7.1.1_r57
+</code></pre>
+<p>下载同步源代码，大概30多个g，这个时候只能慢慢等，公司网比较慢，花了10多个小时，家里不到3小时搞定：</p>
+<pre class=" language-bash"><code class="language-bash">repo <span class="token function">sync</span>
+</code></pre>
+<h2 id="编译源代码"><a href="#编译源代码" class="headerlink" title="编译源代码"></a>编译源代码</h2><p>下载对应分支（android-7.1.1_r57）、对应设备（Nexus 6）的二进制驱动文件，如下图：<br><img src="http://7xrpoc.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-13%20%E4%B8%8B%E5%8D%889.42.21.png" alt=""><br>下载完成后解压到AOSP源代码目录，得到3个sh脚本，依次执行，最后一行输入”I ACCEPT”同意许可证条款，二进制文件及其对应的 Makefile 将会安装在AOSP的vendor目录下</p>
+<p>执行编译前清理：</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">make</span> clobber
+</code></pre>
+<p>初始化编译环境：</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">source</span> build/envsetup.sh
+</code></pre>
+<p>lunch选择<a href="https://source.android.com/setup/build/running.html#selecting-device-build" target="_blank" rel="noopener">编译目标</a>，因为我用的是 Nexus 6，所以执行命令如下：</p>
+<pre class=" language-bash"><code class="language-bash">lunch aosp_shamu-userdebug
+</code></pre>
+<p>使用 make 命令编译代码，借助 -jN 参数指定同时编译的任务数量，一般设置为CPU支持并发线程总数的1-2倍</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">make</span> -j8
+</code></pre>
+<p>编译完成后终端输出，喜闻乐见只花了1小时4分25秒：</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">#### make completed successfully (01:04:25 (hh:mm:ss)) ####</span>
+</code></pre>
+<h2 id="刷机"><a href="#刷机" class="headerlink" title="刷机"></a>刷机</h2><p>首先在开发者模式下打开OEM解锁：<br><img src="http://7xrpoc.com1.z0.glb.clouddn.com/device-2018-09-14-110545.png" alt="oem-w320"><br>adb进入 fastboot 模式：</p>
+<pre class=" language-bash"><code class="language-bash">adb <span class="token function">reboot</span> bootloader
+</code></pre>
+<p>解锁 bootloader：</p>
+<pre class=" language-bash"><code class="language-bash">fastboot oem unlock
+</code></pre>
+<p>刷机，-w 选项会清除 /data 分区：</p>
+<pre class=" language-bash"><code class="language-bash">fastboot flashall -w
+</code></pre>
+<p>不到1分钟，刷机成功，喜大普奔！检查下系统版本：<br><img src="http://7xrpoc.com1.z0.glb.clouddn.com/device-2018-09-14-121427.png" alt="oem-w320"></p>
+<h2 id="坑坑洼洼"><a href="#坑坑洼洼" class="headerlink" title="坑坑洼洼"></a>坑坑洼洼</h2><p>1、踩坑之一</p>
+<p>错误：</p>
+<pre class=" language-bash"><code class="language-bash">Error: gnupg has been deprecated. If you absolutely want to stay on the classic version, <span class="token function">install</span> the gnupg1 port. All other <span class="token function">users</span> are recommended to <span class="token function">install</span> gnupg2.
+Error: Failed to configure gnupg: obsolete port
+Error: See /opt/local/var/macports/logs/_opt_local_var_macports_sources_rsync.macports.org_macports_release_tarballs_ports_mail_gnupg/gnupg/main.log <span class="token keyword">for</span> details.
+Error: Follow https://guide.macports.org/<span class="token comment" spellcheck="true">#project.tickets to report a bug.</span>
+Error: Processing of port gnupg failed
+</code></pre>
+<p>解决办法：卸载gnupg1，安装gnupg2：</p>
+<pre class=" language-bash"><code class="language-bash">POSIXLY_CORRECT<span class="token operator">=</span>1 <span class="token function">sudo</span> port uninstall gnupg1   
+POSIXLY_CORRECT<span class="token operator">=</span>1 <span class="token function">sudo</span> port <span class="token function">install</span> gmake libsdl <span class="token function">git</span> gnupg2  
+</code></pre>
+<p>——————<br>2、踩坑之二<br>原因：AOSP比较庞大，repo sync容易发生错误导致同步中断，使用shell脚本<br>解决办法：使用sh脚本</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token shebang important">#!/bin/sh</span>
+repo <span class="token function">sync</span>
+<span class="token keyword">while</span> <span class="token punctuation">[</span> <span class="token variable">$?</span> -ne 0 <span class="token punctuation">]</span>
+<span class="token keyword">do</span>
+repo <span class="token function">sync</span>
+<span class="token keyword">done</span>
+</code></pre>
+<p>——————<br>3、踩坑之三</p>
+<p>错误：</p>
+<pre class=" language-bash"><code class="language-bash">build/core/combo/mac_version.mk:26: none of the installed SDKs <span class="token punctuation">(</span>ac_sdk_versions_installed<span class="token punctuation">)</span> match supported versions <span class="token punctuation">(</span>10.8 10.9 10.10 10.11<span class="token punctuation">)</span>, trying 10.8
+build/core/combo/mac_version.mk:36: no SDK 10.8 at /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk, trying legacy <span class="token function">dir</span>
+build/core/combo/mac_version.mk:40: *****************************************************
+build/core/combo/mac_version.mk:41: * Can not <span class="token function">find</span> SDK 10.8 at /Developer/SDKs/MacOSX10.8.sdk
+build/core/combo/mac_version.mk:42: *****************************************************
+build/core/combo/mac_version.mk:43: *** Stop<span class="token punctuation">..</span>  Stop.
+</code></pre>
+<p>解决办法：</p>
+<p>查看build/core/combo/mac_version.mk:</p>
+<pre class=" language-bash"><code class="language-bash">mac_sdk_versions_supported :<span class="token operator">=</span>  10.8 10.9 10.10 10.11
+</code></pre>
+<p>下载<a href="https://github.com/phracker/MacOSX-SDKs/releases/download/10.13/MacOSX10.11.sdk.tar.xz" target="_blank" rel="noopener">MacOSX10.11.sdk</a>，完成后解压，放在下面两个目录：</p>
+<pre><code>/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
+</code></pre><pre><code>~/Document/
+</code></pre><p>最后创建软链接：</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">ln</span> -s ~/Document/MacOSX10.11.sdk /Applications/XCode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk
+</code></pre>
+<p>——————<br>4、踩坑之四</p>
+<p>错误：</p>
+<pre class=" language-bash"><code class="language-bash">build/core/config.mk:600: *** Error: could not <span class="token function">find</span> jdk tools.jar at /System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/<span class="token punctuation">..</span>/lib/tools.jar, please check <span class="token keyword">if</span> your JDK was installed correctly.  Stop.
+</code></pre>
+<p>解决办法：设置ANDROID_JAVA_HOME环境变量</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">export</span> JAVA_HOME<span class="token operator">=</span>/Library/Java/JavaVirtualMachines/jdk1.8.0_172.jdk/Contents/Home
+<span class="token function">export</span> ANDROID_JAVA_HOME<span class="token operator">=</span><span class="token variable">$JAVA_HOME</span>
+</code></pre>
+<p>——————<br>5、踩坑之五</p>
+<p>错误：</p>
+<pre class=" language-bash"><code class="language-bash">ninja: Entering directory `.'
+ninja: warning: multiple rules generate out/target/product/shamu/system/etc/gps.conf. builds involving this target will not be correct<span class="token punctuation">;</span> continuing anyway <span class="token punctuation">[</span>-w dupbuild<span class="token operator">=</span>warn<span class="token punctuation">]</span>
+<span class="token punctuation">[</span>  0% 22/33752<span class="token punctuation">]</span> Yacc: aidl <span class="token operator">&lt;=</span> system/tools/aidl/aidl_language_y.yy
+FAILED: /bin/bash -c <span class="token string">"prebuilts/misc/darwin-x86/bison/bison -d  --defines=out/host/darwin-x86/obj/STATIC_LIBRARIES/libaidl-common_intermediates/aidl_language_y.h -o out/host/darwin-x86/obj/STATIC_LIBRARIES/libaidl-common_intermediates/aidl_language_y.cpp system/tools/aidl/aidl_language_y.yy"</span>
+<span class="token punctuation">[</span>  0% 22/33752<span class="token punctuation">]</span> host Java: tagsouplib <span class="token punctuation">(</span>out/host/common/obj/JAVA_LIBRARIES/tagsouplib_intermediates/classes<span class="token punctuation">)</span>
+注: 某些输入文件使用了未经检查或不安全的操作。
+注: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+<span class="token punctuation">[</span>  0% 22/33752<span class="token punctuation">]</span> host Java: antlr-runtime <span class="token punctuation">(</span>out/host/common/obj/JAVA_LIBRARIES/antlr-runtime_intermediates/classes<span class="token punctuation">)</span>
+注: 某些输入文件使用了未经检查或不安全的操作。
+注: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+ninja: build stopped: subcommand failed.
+make: *** <span class="token punctuation">[</span>ninja_wrapper<span class="token punctuation">]</span> Error 1
+
+<span class="token comment" spellcheck="true">#### make failed to build some targets (38 seconds) ####</span>
+</code></pre>
+<p>解决办法：<br>编辑prebuilts/sdk/tools/jack-admin文件</p>
+<pre class=" language-bash"><code class="language-bash">JACK_SERVER_COMMAND<span class="token operator">=</span><span class="token string">"java -XX:MaxJavaStackTraceDepth=-1 -Djava.io.tmpdir=<span class="token variable">$TMPDIR</span> <span class="token variable">$JACK_SERVER_VM_ARGUMENTS</span> -cp <span class="token variable">$LAUNCHER_JAR</span> <span class="token variable">$LAUNCHER_NAME</span>"</span>
+</code></pre>
+<p>修改为</p>
+<pre class=" language-bash"><code class="language-bash">JACK_SERVER_COMMAND<span class="token operator">=</span><span class="token string">"java -XX:MaxJavaStackTraceDepth=-1 -Djava.io.tmpdir=<span class="token variable">$TMPDIR</span> <span class="token variable">$JACK_SERVER_VM_ARGUMENTS</span> -Xmx4096m -cp <span class="token variable">$LAUNCHER_JAR</span> <span class="token variable">$LAUNCHER_NAME</span>"</span>
+</code></pre>
+<p>然后依次执行：</p>
+<pre class=" language-bash"><code class="language-bash">./prebuilts/sdk/tools/jack-admin stop-server
+./prebuilts/sdk/tools/jack-admin start-server
+</code></pre>
+<p>——————<br>6、踩坑之六</p>
+<p>错误：</p>
+<pre class=" language-bash"><code class="language-bash">Jack server installation not found
+</code></pre>
+<p>解决办法：</p>
+<pre class=" language-bash"><code class="language-bash">./prebuilts/sdk/tools/jack-admin install-server jack-launcher.jar jack-server-4.8.ALPHA.jar 
+</code></pre>
+<p>执行命令后提示警告，暂时没管。</p>
+<pre class=" language-bash"><code class="language-bash">Warning:
+JKS 密钥库使用专用格式。建议使用 <span class="token string">"keytool -importkeystore -srckeystore /Users/aero.tang/.jack-server/server.jks -destkeystore /Users/aero.tang/.jack-server/server.jks -deststoretype pkcs12"</span> 迁移到行业标准格式 PKCS12。
+
+Warning:
+JKS 密钥库使用专用格式。建议使用 <span class="token string">"keytool -importkeystore -srckeystore /Users/aero.tang/.jack-server/client.jks -destkeystore /Users/aero.tang/.jack-server/client.jks -deststoretype pkcs12"</span> 迁移到行业标准格式 PKCS12。
+</code></pre>
+<p>——————<br>7、踩坑之七</p>
+<p>错误：</p>
+<pre class=" language-bash"><code class="language-bash">external/libcxx/include/cstdlib:167:44: error: declaration conflicts with target of using declaration already <span class="token keyword">in</span> scope
+external/libcxx/include/cstdlib:169:44: error: declaration conflicts with target of using declaration already <span class="token keyword">in</span> scope
+external/libcxx/include/cstdlib:172:42: error: declaration conflicts with target of using declaration already <span class="token keyword">in</span> scope
+external/libcxx/include/cstdlib:174:42: error: declaration conflicts with target of using declaration already <span class="token keyword">in</span> scope
+<span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span>
+</code></pre>
+<p>解决办法：见<a href="https://stackoverflow.com/questions/47060910/error-declaration-conflicts-with-target-of-using-declaration-already-in-scope" target="_blank" rel="noopener">stackoverflow</a>，Xcode降级到8.3.3<br>——————<br>8、踩坑之八</p>
+<p>原因：High Sierra系统下bison有关于动态格式化字符串的bug，具体见<a href="https://android-review.googlesource.com/c/platform/external/bison/+/517740" target="_blank" rel="noopener">Bison Patch</a></p>
+<pre class=" language-bash"><code class="language-bash">FAILED: /bin/bash -c <span class="token string">"prebuilts/misc/darwin-x86/bison/bison -d  --defines=out/host/darwin-x86/obj/STATIC_LIBRARIES/libaidl-common_intermediates/aidl_language_y.h -o out/host/darwin-x86/obj/STATIC_LIBRARIES/libaidl-common_intermediates/aidl_language_y.cpp system/tools/aidl/aidl_language_y.yy"</span>
+</code></pre>
+<p>解决办法：AOSP源代码目录执行</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">cd</span> /external/bison
+<span class="token function">git</span> cherry-pick c0c852bd6fe462b148475476d9124fd740eba160
+mm
+<span class="token function">cp</span> /out/host/darwin-x86/bin/bison /prebuilts/misc/darwin-x86/bison/
+</code></pre>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ol>
+<li><a href="https://source.android.com/setup/build/initializing" target="_blank" rel="noopener">搭建编译环境</a></li>
+<li><a href="https://source.android.com/setup/start/build-numbers.html#source-code-tags-and-builds" target="_blank" rel="noopener">代号、标签和版本号</a></li>
+<li><a href="https://source.android.com/setup/build/downloading" target="_blank" rel="noopener">下载源代码</a></li>
+<li><a href="https://source.android.com/setup/build/building" target="_blank" rel="noopener">准备编译</a></li>
+<li><a href="https://source.android.com/setup/build/building#run-it" target="_blank" rel="noopener">开始运行</a></li>
+<li><a href="https://source.android.com/setup/develop/repo.html" target="_blank" rel="noopener">Repo 命令参考资料</a></li>
+<li><a href="https://developers.google.com/android/drivers" target="_blank" rel="noopener">Nexus、Pixel设备的二进制驱动文件列表</a></li>
+</ol>
+
+            </div>
+            <hr>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff;
+        background-color: #22AB38;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff;
+        background-color: #019FE8;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a class="reward-link btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs">
+                        <li class="tab wechat-tab waves-effect waves-light"><a class="active" href="#wechat">微信</a></li>
+                        <li class="tab alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                    </ul>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#reward .reward-link').on('click', function () {
+            $('#rewardModal').openModal();
+        });
+
+        $('#rewardModal .close').on('click', function () {
+            $('#rewardModal').closeModal();
+        });
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            <div class="reprint">
+                <p>
+                    <span class="reprint-tip">转载请注明: </span>
+                    <a href="http://yoursite.com" class="b-link-green">ThisMJ</a>
+                    <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
+                    <a href="/2018/09/13/ji-zhu-mac-os-zhi-android-yuan-ma-xia-zai-bian-yi-shua-ji/" class="b-link-green">Mac OS之Android源码下载、编译、刷机</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '6964b023453f0f1b986d',
+        clientSecret: 'd42b85835e1717914a81e4f68d2f98b6f9e96858',
+        repo: 'thismj.github.io',
+        owner: 'thismj',
+        admin: ["thismj"],
+        id: '2018-09-13T09-25-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">上一篇</div>
+            <div class="card">
+                <a href="/2018/12/01/ji-zhu-constraintlayout/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/images/2018-12-01.jpeg" class="responsive-img" alt="从需求探索ConstraintLayout">
+                        
+                        <span class="card-title">从需求探索ConstraintLayout</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">ConstraintLayout对于前端开发，画界面这种事情是必不可少的，并且能够直观地看到代码到视觉的转换，我觉得是一件很有意思的事情。当然，界面是由很多子元素组成的，我们需要选取不同的布局方式，把这些子元素按照设计稿的要求排列起来。首先</div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-12-01
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Android/" class="post-category" target="_blank">
+                                    Android
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Layout/" target="_blank">
+                        <span class="chip bg-color">Layout</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">本篇</div>
+            <div class="card">
+                <a href="/2018/09/13/ji-zhu-mac-os-zhi-android-yuan-ma-xia-zai-bian-yi-shua-ji/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/images/2018-09-13.jpeg" class="responsive-img" alt="Mac OS之Android源码下载、编译、刷机">
+                        
+                        <span class="card-title">Mac OS之Android源码下载、编译、刷机</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">软硬件环境
+系统版本：Mac OS High Sierra 10.13.2 (17C88)
+刷机硬件：Nexus 6
+AOSP分支：android-7.1.1_r57（NGI77B）
+
+搭建Mac编译环境通过shell使用以下命令创建大小写</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-09-13
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Android/" class="post-category" target="_blank">
+                                    Android
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/AOSP/" target="_blank">
+                        <span class="chip bg-color">AOSP</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: ThisMJ<br />'
+            + '作者: ThisMJ<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+    </div>
+    <div class="col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title">目录</div>
+            <div id="toc-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            本站由&copy;<a href="https://blinkfox.github.io/" target="_blank">Blinkfox</a>基于
+            <a href="https://hexo.io/" target="_blank">Hexo</a> 采用
+            <a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">hexo-theme-matery</a>的主题搭建.
+        </div>
+        <div class="col s12 m4 l4 social-link"><a href="https://github.com/thismj" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+    <i class="fa fa-github"></i>
+</a>
+<a href="mailto:thiscrazymj@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+    <i class="fa fa-envelope-open"></i>
+</a>
+
+<a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+    <i class="fa fa-rss"></i>
+</a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title">搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input" autofocus>
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/js/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+
+<script src="/libs/others/clicklove.js"></script>
+
+<script src="/js/matery.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116677145-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-116677145-1');
+</script>
+
+
+</body>
+</html>
