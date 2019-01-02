@@ -107,4 +107,7 @@ feed:
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type:
+  type: git
+  repo: git@github.com:thismj/thismj.github.io.git
+  branch: [master]
+  message: update hexo theme.

@@ -80,12 +80,12 @@ mathjax:
 clicklove:
   enable: true
 
-# profile in about page, including avatars, career, and personal introductions.
+# profile in about page, including avatars, career, and personal introductions. 
 # 在”关于”页面中配置个人信息，包括头像、职业和个人介绍.
 profile:
-  avatar: /medias/avatar.jpg
-  career: Software Engineer
-  introduction: If you wish to succeed, you should use persistence as your good friend, experience as your reference, prudence as your brother and hope as your sentry.
+  avatar: /medias/avatar.jpeg
+  career: Android开发工程师
+  introduction: 
 
 # config my projects informations in about page.
 # If you don't want to display this `My Projects` content, you can deactivate or delete this configuration.
@@ -151,13 +151,13 @@ postCalendar: true
 # the Gitalk config，default disabled
 # Gitalk 评论模块的配置，默认为不激活
 gitalk:
-  enable: false
-  owner:
-  repo:
+  enable: true
+  owner: 'thismj'
+  repo: 'thismj.github.io'
   oauth:
-    clientId:
-    clientSecret:
-  admin:
+    clientId: 6964b023453f0f1b986d
+    clientSecret: d42b85835e1717914a81e4f68d2f98b6f9e96858
+  admin: ['thismj']
 
 # the Gitment config，default disabled
 # Gitment 评论模块的配置，默认为不激活
