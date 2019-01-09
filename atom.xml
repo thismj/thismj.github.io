@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-01-02T14:33:14.321Z</updated>
+  <updated>2019-01-09T09:30:59.439Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,42 +17,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>S.O.L.I.D面向对象编程原则</title>
-    <link href="http://yoursite.com/2019/01/02/s.o.l.i.d-mian-xiang-dui-xiang-bian-cheng-yuan-ze/"/>
-    <id>http://yoursite.com/2019/01/02/s.o.l.i.d-mian-xiang-dui-xiang-bian-cheng-yuan-ze/</id>
-    <published>2019-01-02T14:31:00.000Z</published>
-    <updated>2019-01-02T14:33:14.321Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;##单一功能&lt;/p&gt;
-&lt;p&gt;##开闭原则&lt;/p&gt;
-&lt;p&gt;##里氏替换&lt;/p&gt;
-&lt;p&gt;##接口隔离&lt;/p&gt;
-&lt;p&gt;##依赖反转&lt;/p&gt;
-
-        
-      
-    
-    </summary>
-    
-      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
-    
-    
-      <category term="设计模式" scheme="http://yoursite.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
     <title>从需求探索ConstraintLayout</title>
     <link href="http://yoursite.com/2018/12/01/ji-zhu-constraintlayout/"/>
     <id>http://yoursite.com/2018/12/01/ji-zhu-constraintlayout/</id>
     <published>2018-12-01T01:25:00.000Z</published>
-    <updated>2018-12-29T15:01:31.472Z</updated>
+    <updated>2019-01-09T09:30:59.439Z</updated>
     
     <summary type="html">
     
@@ -60,7 +29,7 @@
       
         
         
-          &lt;h1 id=&quot;ConstraintLayout&quot;&gt;&lt;a href=&quot;#ConstraintLayout&quot; class=&quot;headerlink&quot;
+          &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot;
         
       
     
@@ -78,7 +47,7 @@
     <link href="http://yoursite.com/2018/09/13/ji-zhu-mac-os-zhi-android-yuan-ma-xia-zai-bian-yi-shua-ji/"/>
     <id>http://yoursite.com/2018/09/13/ji-zhu-mac-os-zhi-android-yuan-ma-xia-zai-bian-yi-shua-ji/</id>
     <published>2018-09-13T01:25:00.000Z</published>
-    <updated>2018-12-29T14:12:21.059Z</updated>
+    <updated>2019-01-09T09:58:06.620Z</updated>
     
     <summary type="html">
     

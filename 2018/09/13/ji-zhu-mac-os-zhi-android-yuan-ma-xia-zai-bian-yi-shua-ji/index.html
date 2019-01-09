@@ -296,7 +296,7 @@ AOSP分支：android-7.1.1_r57（NGI77B）
     }
 
     #toc-content .toc-link:hover {
-        color: #42b983;
+        color: #f44336;
         font-weight: 700;
         text-decoration: underline;
     }
@@ -307,11 +307,11 @@ AOSP分支：android-7.1.1_r57（NGI77B）
     }
 
     #toc-content .is-active-link {
-        color: #42b983;
+        color: #f44336;
     }
 
     #toc-content .is-active-link::before {
-        background-color: #42b983;
+        background-color: #f44336;
     }
 </style>
 <div class="row">
@@ -390,8 +390,8 @@ curl https://storage.googleapis.com/git-repo-downloads/repo <span class="token o
 <span class="token function">cd</span> /Volumes/android
 <span class="token function">mkdir</span> AOSP
 <span class="token function">cd</span> AOSP
-<span class="token function">git</span> config --global user.name <span class="token string">"Heyruad.Towne"</span>
-<span class="token function">git</span> config --global user.email <span class="token string">"Heyruad.Towne@gmail.com"</span>
+<span class="token function">git</span> config --global user.name <span class="token string">"thismj"</span>
+<span class="token function">git</span> config --global user.email <span class="token string">"thiscrazymj@gmail.com"</span>
 
 <span class="token comment" spellcheck="true">#可以翻墙（Google）</span>
 repo init -u https://android.googlesource.com/platform/manifest -b android-7.1.1_r57
@@ -401,7 +401,7 @@ repo init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest -b android-7.1.
 <p>下载同步源代码，大概30多个g，这个时候只能慢慢等，公司网比较慢，花了10多个小时，家里不到3小时搞定：</p>
 <pre class=" language-bash"><code class="language-bash">repo <span class="token function">sync</span>
 </code></pre>
-<h2 id="编译源代码"><a href="#编译源代码" class="headerlink" title="编译源代码"></a>编译源代码</h2><p>下载对应分支（android-7.1.1_r57）、对应设备（Nexus 6）的二进制驱动文件，如下图：<br><img src="http://7xrpoc.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-13%20%E4%B8%8B%E5%8D%889.42.21.png" alt=""><br>下载完成后解压到AOSP源代码目录，得到3个sh脚本，依次执行，最后一行输入”I ACCEPT”同意许可证条款，二进制文件及其对应的 Makefile 将会安装在AOSP的vendor目录下</p>
+<h2 id="编译源代码"><a href="#编译源代码" class="headerlink" title="编译源代码"></a>编译源代码</h2><p>下载对应分支（android-7.1.1_r57）、对应设备（Nexus 6）的二进制驱动文件，如下图：<br><img src="https://thismj.nos-eastchina1.126.net/image/post_aosp_ngi77b_binaries.png" alt=""><br>下载完成后解压到AOSP源代码目录，得到3个sh脚本，依次执行，最后一行输入”I ACCEPT”同意许可证条款，二进制文件及其对应的 Makefile 将会安装在AOSP的vendor目录下</p>
 <p>执行编译前清理：</p>
 <pre class=" language-bash"><code class="language-bash"><span class="token function">make</span> clobber
 </code></pre>
@@ -417,7 +417,7 @@ repo init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest -b android-7.1.
 <p>编译完成后终端输出，喜闻乐见只花了1小时4分25秒：</p>
 <pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">#### make completed successfully (01:04:25 (hh:mm:ss)) ####</span>
 </code></pre>
-<h2 id="刷机"><a href="#刷机" class="headerlink" title="刷机"></a>刷机</h2><p>首先在开发者模式下打开OEM解锁：<br><img src="http://7xrpoc.com1.z0.glb.clouddn.com/device-2018-09-14-110545.png" alt="oem-w320"><br>adb进入 fastboot 模式：</p>
+<h2 id="刷机"><a href="#刷机" class="headerlink" title="刷机"></a>刷机</h2><p>首先在开发者模式下打开OEM解锁：<br><img src="https://thismj.nos-eastchina1.126.net/image/post_aosp_oem.png" alt=""><br>adb进入 fastboot 模式：</p>
 <pre class=" language-bash"><code class="language-bash">adb <span class="token function">reboot</span> bootloader
 </code></pre>
 <p>解锁 bootloader：</p>
@@ -426,8 +426,9 @@ repo init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest -b android-7.1.
 <p>刷机，-w 选项会清除 /data 分区：</p>
 <pre class=" language-bash"><code class="language-bash">fastboot flashall -w
 </code></pre>
-<p>不到1分钟，刷机成功，喜大普奔！检查下系统版本：<br><img src="http://7xrpoc.com1.z0.glb.clouddn.com/device-2018-09-14-121427.png" alt="oem-w320"></p>
-<h2 id="坑坑洼洼"><a href="#坑坑洼洼" class="headerlink" title="坑坑洼洼"></a>坑坑洼洼</h2><p>1、踩坑之一</p>
+<p>不到1分钟，刷机成功，喜大普奔！<br><img src="https://thismj.nos-eastchina1.126.net/image/post_aosp_flash_successfully.png" alt=""></p>
+<p>检查下手机系统版本：<br><img src="https://thismj.nos-eastchina1.126.net/image/post_aosp_check_version.png" alt=""></p>
+<h2 id="踩坑记录"><a href="#踩坑记录" class="headerlink" title="踩坑记录"></a>踩坑记录</h2><p>1、踩坑之一</p>
 <p>错误：</p>
 <pre class=" language-bash"><code class="language-bash">Error: gnupg has been deprecated. If you absolutely want to stay on the classic version, <span class="token function">install</span> the gnupg1 port. All other <span class="token function">users</span> are recommended to <span class="token function">install</span> gnupg2.
 Error: Failed to configure gnupg: obsolete port
@@ -735,7 +736,7 @@ mm
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary">ConstraintLayout对于前端开发，画界面这种事情是必不可少的，并且能够直观地看到代码到视觉的转换，我觉得是一件很有意思的事情。当然，界面是由很多子元素组成的，我们需要选取不同的布局方式，把这些子元素按照设计稿的要求排列起来。首先</div>
+                    <div class="summary">前言对于前端开发，画界面这种事情是必不可少的，并且能够直观地看到代码到视觉的转换，我觉得是一件很有意思的事情。当然，界面是由很多子元素组成的，我们需要选取不同的布局方式，把这些子元素按照设计稿的要求排列起来。首先简明扼要地概括一下Andro</div>
                     <div class="publish-info">
                         <span class="publish-date">
                             <i class="fa fa-clock-o fa-fw icon-date"></i>2018-12-01

@@ -825,7 +825,7 @@ article .article-tags .chip {
 
 #artDetail .post-info .post-category:hover {
     font-weight: bold;
-    color: #42b983;
+    color: #f44336;
     text-decoration: underline;
 }
 
@@ -873,7 +873,7 @@ article .article-tags .chip {
 
 #artDetail .reprint a {
     font-size: 1.05rem;
-    color: #42b983;
+    color: #f44336;
     font-weight: 500;
 }
 
@@ -889,7 +889,7 @@ article .article-tags .chip {
 
 #articleContent a {
     padding: 0 2px;
-    color: #42b983;
+    color: #f44336;
     font-weight: 500;
     text-decoration: underline;
 }
