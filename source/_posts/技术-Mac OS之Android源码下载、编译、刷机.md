@@ -62,8 +62,8 @@ chmod a+x ~/bin/repo
 cd /Volumes/android
 mkdir AOSP
 cd AOSP
-git config --global user.name "Heyruad.Towne"
-git config --global user.email "Heyruad.Towne@gmail.com"
+git config --global user.name "thismj"
+git config --global user.email "thiscrazymj@gmail.com"
 
 #可以翻墙（Google）
 repo init -u https://android.googlesource.com/platform/manifest -b android-7.1.1_r57
@@ -77,7 +77,7 @@ repo sync
 
 ## 编译源代码
 下载对应分支（android-7.1.1_r57）、对应设备（Nexus 6）的二进制驱动文件，如下图：
-![](http://7xrpoc.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-13%20%E4%B8%8B%E5%8D%889.42.21.png)
+![](https://thismj.nos-eastchina1.126.net/image/post_aosp_ngi77b_binaries.png)
 下载完成后解压到AOSP源代码目录，得到3个sh脚本，依次执行，最后一行输入"I ACCEPT"同意许可证条款，二进制文件及其对应的 Makefile 将会安装在AOSP的vendor目录下
 
 执行编译前清理：
@@ -103,7 +103,7 @@ make -j8
 
 ## 刷机
 首先在开发者模式下打开OEM解锁：
-![oem-w320](http://7xrpoc.com1.z0.glb.clouddn.com/device-2018-09-14-110545.png)
+![](https://thismj.nos-eastchina1.126.net/image/post_aosp_oem.png)
 adb进入 fastboot 模式：
 ```bash
 adb reboot bootloader
@@ -116,9 +116,10 @@ fastboot oem unlock
 ```bash
 fastboot flashall -w
 ```
-不到1分钟，刷机成功，喜大普奔！检查下系统版本：
-![oem-w320](http://7xrpoc.com1.z0.glb.clouddn.com/device-2018-09-14-121427.png)
-## 坑坑洼洼
+不到1分钟，刷机成功，喜大普奔！检查下手机系统版本：
+![](https://thismj.nos-eastchina1.126.net/image/post_aosp_check_version.png)
+
+## 踩坑记录
 1、踩坑之一
 
 错误：
