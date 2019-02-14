@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-01-14T08:52:34.406Z</updated>
+  <updated>2019-02-14T11:47:21.159Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,11 +17,54 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>浅析ZIP格式</title>
+    <link href="http://yoursite.com/2019/02/14/qian-xi-zip-ge-shi/"/>
+    <id>http://yoursite.com/2019/02/14/qian-xi-zip-ge-shi/</id>
+    <published>2019-02-14T11:34:43.000Z</published>
+    <updated>2019-02-14T11:47:21.159Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;ZIP文件格式是一种数据压缩和文档储存的文件格式，原名Deflate，发明者为菲尔·卡茨（Phil
+        
+      
+    
+    </summary>
+    
+      <category term="杂项" scheme="http://yoursite.com/categories/%E6%9D%82%E9%A1%B9/"/>
+    
+    
+      <category term="ZIP" scheme="http://yoursite.com/tags/ZIP/"/>
+    
+      <category term="压缩" scheme="http://yoursite.com/tags/%E5%8E%8B%E7%BC%A9/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android》之札记一</title>
+    <link href="http://yoursite.com/2019/01/24/gradle-for-android-zhi-zha-ji-yi/"/>
+    <id>http://yoursite.com/2019/01/24/gradle-for-android-zhi-zha-ji-yi/</id>
+    <published>2019-01-24T04:13:25.313Z</published>
+    <updated>2019-01-24T04:13:25.313Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>2019年初，给30岁之际的自己立些儿Flag</title>
     <link href="http://yoursite.com/2019/01/14/2019-nian-chu-gei-30-sui-zhi-ji-de-zi-ji-li-xie-er-flag/"/>
     <id>http://yoursite.com/2019/01/14/2019-nian-chu-gei-30-sui-zhi-ji-de-zi-ji-li-xie-er-flag/</id>
     <published>2019-01-14T08:48:33.000Z</published>
-    <updated>2019-01-14T08:52:34.406Z</updated>
+    <updated>2019-01-14T13:10:49.202Z</updated>
     
     <summary type="html">
     
@@ -75,7 +118,7 @@
     <link href="http://yoursite.com/2018/09/13/ji-zhu-mac-os-zhi-android-yuan-ma-xia-zai-bian-yi-shua-ji/"/>
     <id>http://yoursite.com/2018/09/13/ji-zhu-mac-os-zhi-android-yuan-ma-xia-zai-bian-yi-shua-ji/</id>
     <published>2018-09-13T01:25:00.000Z</published>
-    <updated>2019-01-09T10:05:22.180Z</updated>
+    <updated>2019-02-14T11:40:13.766Z</updated>
     
     <summary type="html">
     

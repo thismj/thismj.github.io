@@ -1,0 +1,1455 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="浅析ZIP格式, ThisMJ">
+    <meta name="description" content="
+ZIP文件格式是一种数据压缩和文档储存的文件格式，原名Deflate，发明者为菲尔·卡茨（Phil Katz），他于1989年1月公布了该格式的资料。ZIP通常使用后缀名“.zip”，它的MIME格式为application/zip。
+
+">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>浅析ZIP格式 | ThisMJ</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+</head>
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="container">
+            <div class="nav-wrapper">
+                <div class="brand-logo">
+                    <a href="/" class="waves-effect waves-light">
+                        
+                        <img src="/medias/logo.png" class="logo-img hide-on-small-only">
+                        
+                        <span class="logo-span">ThisMJ</span>
+                    </a>
+                </div>
+                <a href="#" data-activates="mobile-nav" class="button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li>
+        <a id="toggleSearch" class="waves-effect waves-light">
+            <i id="searchIcon" class="mdi-action-search"></i>
+        </a>
+    </li>
+
+</ul>
+
+<div class="side-nav" id="mobile-nav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">ThisMJ</div>
+        <div class="logo-desc">
+            
+            不忘初心，砥砺前行
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        
+    </ul>
+
+    <div class="social-link"><a href="https://github.com/thismj" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+    <i class="fa fa-github"></i>
+</a>
+<a href="mailto:thiscrazymj@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+    <i class="fa fa-envelope-open"></i>
+</a>
+
+<a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+    <i class="fa fa-rss"></i>
+</a>
+</div>
+</div>
+
+            </div>
+        </div>
+
+        
+    </nav>
+</header>
+
+
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('嘿嘿嘿嘿，你知道密码不？')).toString(CryptoJS.enc.Hex)) {
+                alert('输得啥玩意儿。。。');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        浅析ZIP格式
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1,
+    #articleContent h2,
+    #articleContent h3,
+    #articleContent h4,
+    #articleContent h5,
+    #articleContent h6 {
+        padding-top: 76px;
+        margin-top: -76px;
+    }
+
+    #articleContent h1 {
+        line-height: 3.5rem;
+    }
+
+    #articleContent h2 {
+        line-height: 3.2rem;
+    }
+
+    #articleContent h3 {
+        line-height: 2.8rem;
+    }
+
+    #articleContent h4 {
+        line-height: 2.5rem;
+    }
+
+    #articleContent h5 {
+        line-height: 2.2rem;
+    }
+
+    #articleContent h6 {
+        line-height: 1.9rem;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #f44336;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #f44336;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #f44336;
+    }
+</style>
+<div class="row">
+    <div class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            
+            <div class="article-tag">
+                
+                <a href="/tags/ZIP/" target="_blank">
+                    <span class="chip bg-color">ZIP</span>
+                </a>
+                
+                <a href="/tags/压缩/" target="_blank">
+                    <span class="chip bg-color">压缩</span>
+                </a>
+                
+            </div>
+            
+            <div class="post-info">
+                
+                <span class="post-cate">
+                    <i class="fa fa-bookmark fa-fw icon-category"></i>
+                    
+                    <a href="/categories/杂项/" class="post-category" target="_blank">
+                        杂项
+                    </a>
+                    
+                </span>
+                
+
+                <span class="post-date">
+                    <i class="fa fa-clock-o fa-fw"></i>2019-02-14
+                </span>
+            </div>
+        </div>
+        <hr>
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p>ZIP文件格式是一种数据压缩和文档储存的文件格式，原名Deflate，发明者为菲尔·卡茨（Phil Katz），他于1989年1月公布了该格式的资料。ZIP通常使用后缀名“.zip”，它的MIME格式为application/zip。</p>
+</blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>为什么要了解ZIP格式？因为apk格式实际上也遵循<a href="https://pkware.cachefly.net/webdocs/APPNOTE/APPNOTE-6.2.0.txt" target="_blank" rel="noopener">ZIP标准</a>，如果要研究apk打包、签名等流程，那么最好先对ZIP格式有个简单的了解。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>一个ZIP压缩文件的通用格式如下：</p>
+<pre><code>Overall .ZIP file format:
+
+    [local file header 1]
+    [file data 1]
+    [data descriptor 1]
+    . 
+    .
+    .
+    [local file header n]
+    [file data n]
+    [data descriptor n]
+    [archive decryption header] (EFS)
+    [archive extra data record] (EFS)
+    [central directory]
+    [zip64 end of central directory record]
+    [zip64 end of central directory locator] 
+    [end of central directory record]
+</code></pre><p>对其中主要的格式段分析如下：</p>
+<h3 id="Local-file-header-文件头"><a href="#Local-file-header-文件头" class="headerlink" title="Local file header 文件头"></a>Local file header 文件头</h3><table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>Bytes</th>
+<th>Description</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>4</td>
+<td>local file header signature</td>
+<td>文件头标识 (固定值0x04034b50)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2</td>
+<td>version needed to extract</td>
+<td>解压时遵循ZIP规范的最低版本</td>
+</tr>
+<tr>
+<td>6</td>
+<td>2</td>
+<td>general purpose bit flag</td>
+<td>通用标志位</td>
+</tr>
+<tr>
+<td>8</td>
+<td>2</td>
+<td>compression method</td>
+<td>压缩方式</td>
+</tr>
+<tr>
+<td>10</td>
+<td>2</td>
+<td>last mod file time</td>
+<td>最后修改时间（MS-DOS格式）</td>
+</tr>
+<tr>
+<td>12</td>
+<td>2</td>
+<td>last mod file date</td>
+<td>最后修改日期（MS-DOS格式）</td>
+</tr>
+<tr>
+<td>14</td>
+<td>4</td>
+<td>crc-32</td>
+<td>冗余校验码</td>
+</tr>
+<tr>
+<td>18</td>
+<td>4</td>
+<td>compressed size</td>
+<td>压缩后的大小</td>
+</tr>
+<tr>
+<td>22</td>
+<td>4</td>
+<td>uncompressed size</td>
+<td>未压缩之前的大小</td>
+</tr>
+<tr>
+<td>26</td>
+<td>2</td>
+<td>file name length</td>
+<td>文件名长度（n）</td>
+</tr>
+<tr>
+<td>28</td>
+<td>2</td>
+<td>extra field length</td>
+<td>扩展区长度（m）</td>
+</tr>
+<tr>
+<td>30</td>
+<td>n</td>
+<td>file name</td>
+<td>文件名</td>
+</tr>
+<tr>
+<td>30+n</td>
+<td>m</td>
+<td>extra field</td>
+<td>扩展区</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<h3 id="File-data-文件数据"><a href="#File-data-文件数据" class="headerlink" title="File data 文件数据"></a>File data 文件数据</h3><p>紧跟在 [Local file header] 数据段后，用来储存文件本身的数据。</p>
+<h3 id="Data-descriptor-数据描述"><a href="#Data-descriptor-数据描述" class="headerlink" title="Data descriptor 数据描述"></a>Data descriptor 数据描述</h3><table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>Bytes</th>
+<th>Description</th>
+<th>译</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>4</td>
+<td></td>
+<td>数据描述符标识（固定值0x08074b50，<a href="https://pkware.cachefly.net/webdocs/APPNOTE/APPNOTE-6.2.0.txt" target="_blank" rel="noopener">ZIP标准</a>里面没有这个字段）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4</td>
+<td>crc-32</td>
+<td>冗余校验码</td>
+</tr>
+<tr>
+<td>8</td>
+<td>4</td>
+<td>compressed size</td>
+<td>压缩后的大小</td>
+</tr>
+<tr>
+<td>12</td>
+<td>4</td>
+<td>uncompressed size</td>
+<td>未压缩之前的大小</td>
+</tr>
+</tbody>
+</table>
+<p>只有当 [local file header] 的 <em>general purpose bit flag</em> 字段第3位Bit置1时，[data descriptor] 才会存在，此时[local file header] 的 <em>crc-32</em> 、<em>compressed size</em> 、<em>uncompressed size</em> 这三个字段都会被储存为0，其正确的值会记录在 [data descriptor] 数据段里面。</p>
+<h3 id="Central-directory"><a href="#Central-directory" class="headerlink" title="Central directory"></a>Central directory</h3><p>根据上面的分析可知，ZIP中的每一个文件，都对应着 [local file header] + [file data] + [data descriptor]，而 [central directory] 就是ZIP中所有文件的目录，其储存格式展开如下：</p>
+<pre><code>[file header 1]
+      .
+      .
+      . 
+[file header n]
+[digital signature] 
+</code></pre><h4 id="File-header"><a href="#File-header" class="headerlink" title="File header"></a>File header</h4><table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>Bytes</th>
+<th>Description</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>4</td>
+<td>central file header signature</td>
+<td>文件头标识 (固定值0x02014b50)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2</td>
+<td>version made by</td>
+<td>高位字节表示文件属性信息的兼容性，<br>低位字节表示压缩软件支持的ZIP规范版本</td>
+</tr>
+<tr>
+<td>6</td>
+<td>2</td>
+<td>version needed to extract</td>
+<td>解压时遵循ZIP规范的最低版本</td>
+</tr>
+<tr>
+<td>8</td>
+<td>2</td>
+<td>general purpose bit flag</td>
+<td>通用标志位</td>
+</tr>
+<tr>
+<td>10</td>
+<td>2</td>
+<td>compression method</td>
+<td>压缩方式</td>
+</tr>
+<tr>
+<td>12</td>
+<td>2</td>
+<td>last mod file time</td>
+<td>最后修改时间（MS-DOS格式）</td>
+</tr>
+<tr>
+<td>14</td>
+<td>2</td>
+<td>last mod file date</td>
+<td>最后修改日期（MS-DOS格式）</td>
+</tr>
+<tr>
+<td>16</td>
+<td>4</td>
+<td>crc-32</td>
+<td>冗余校验码</td>
+</tr>
+<tr>
+<td>20</td>
+<td>4</td>
+<td>compressed size</td>
+<td>压缩后的大小</td>
+</tr>
+<tr>
+<td>24</td>
+<td>4</td>
+<td>uncompressed size</td>
+<td>未压缩之前的大小</td>
+</tr>
+<tr>
+<td>28</td>
+<td>2</td>
+<td>file name length</td>
+<td>文件名长度（n）</td>
+</tr>
+<tr>
+<td>30</td>
+<td>2</td>
+<td>extra field length</td>
+<td>扩展区长度（m）</td>
+</tr>
+<tr>
+<td>32</td>
+<td>2</td>
+<td>file comment length</td>
+<td>文件注释长度（k）</td>
+</tr>
+<tr>
+<td>34</td>
+<td>2</td>
+<td>disk number start</td>
+<td>文件开始位置的磁盘编号</td>
+</tr>
+<tr>
+<td>36</td>
+<td>2</td>
+<td>internal file attributes</td>
+<td>内部文件属性</td>
+</tr>
+<tr>
+<td>38</td>
+<td>4</td>
+<td>external file attributes</td>
+<td>外部文件属性</td>
+</tr>
+<tr>
+<td>42</td>
+<td>4</td>
+<td>relative offset of local header</td>
+<td>对应 [local file header] 的偏移位置</td>
+</tr>
+<tr>
+<td>46</td>
+<td>n</td>
+<td>file name</td>
+<td>目录文件名</td>
+</tr>
+<tr>
+<td>46+n</td>
+<td>m</td>
+<td>extra field</td>
+<td>扩展域</td>
+</tr>
+<tr>
+<td>46+n+m</td>
+<td>k</td>
+<td>file comment</td>
+<td>文件注释内容</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<h4 id="digital-signature"><a href="#digital-signature" class="headerlink" title="digital signature"></a>digital signature</h4><table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>Bytes</th>
+<th>Description</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>4</td>
+<td>header signature</td>
+<td>数字签名头标识 (固定值0x05054b50)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2</td>
+<td>size of data</td>
+<td>数字签名数据大小（n）</td>
+</tr>
+<tr>
+<td>6</td>
+<td>n</td>
+<td>signature data</td>
+<td>数字签名数据</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<h3 id="end-of-central-directory-record-中心目录结束记录"><a href="#end-of-central-directory-record-中心目录结束记录" class="headerlink" title="end of central directory record 中心目录结束记录"></a>end of central directory record 中心目录结束记录</h3><table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>Bytes</th>
+<th>Description</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>4</td>
+<td>end of central dir signature</td>
+<td>中心目录结束标识 (固定值0x06054b50)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2</td>
+<td>number of this disk</td>
+<td>当前磁盘编号</td>
+</tr>
+<tr>
+<td>6</td>
+<td>2</td>
+<td>number of the disk with the<br>start of the central directory</td>
+<td>中心目录开始位置的磁盘编号</td>
+</tr>
+<tr>
+<td>8</td>
+<td>2</td>
+<td>total number of entries in the<br>central directory on this disk</td>
+<td>中心目录开始位置的磁盘编号</td>
+</tr>
+<tr>
+<td>10</td>
+<td>2</td>
+<td>total number of entries in<br>the central directory</td>
+<td>该磁盘上所记录的中心目录数量</td>
+</tr>
+<tr>
+<td>12</td>
+<td>4</td>
+<td>size of the central directory</td>
+<td>中心目录大小</td>
+</tr>
+<tr>
+<td>16</td>
+<td>4</td>
+<td>offset of start of central<br>directory with respect to<br>the starting disk number</td>
+<td>中心目录开始位置相对于.ZIP archive开始的位移</td>
+</tr>
+<tr>
+<td>20</td>
+<td>2</td>
+<td>.ZIP file comment length</td>
+<td>ZIP文件注释内容长度（n）</td>
+</tr>
+<tr>
+<td>22</td>
+<td>n</td>
+<td>.ZIP file comment</td>
+<td>ZIP文件注释内容</td>
+</tr>
+</tbody>
+</table>
+<p><br><br>根据以上的分析，可以知道一个ZIP压缩文件，主要包含三个部分，即：</p>
+<p><img src="https://thismj.nos-eastchina1.126.net/image/zip_format.png" alt="Alt text"></p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>我们在Mac OS下打包一个ZIP文件，来与上面的分析做一个对比，文件目录如下所示：</p>
+<pre><code>.
+├── a.txt
+└── b
+    └── c.txt
+
+1 directory, 2 files
+</code></pre><p>用Sublime打开ZIP压缩文件：</p>
+<pre><code>504b 0304 1400 0800 0800 0588 4d4e 0000 
+0000 0000 0000 0000 0000 0500 1000 612e
+7478 7455 580c 009b dc63 5c9a dc63 5c57
+3c14 002b c9c8 2c56 00a2 b4a2 fc5c 8544
+3d00 504b 0708 3098 2c41 0f00 0000 0f00
+0000 504b 0304 0a00 0000 0000 0d88 4d4e
+0000 0000 0000 0000 0000 0000 0900 1000
+5f5f 4d41 434f 5358 2f55 580c 00aa dc63
+5caa dc63 5c57 3cec 8250 4b03 0414 0008
+0008 0005 884d 4e00 0000 0000 0000 0000
+0000 0010 0010 005f 5f4d 4143 4f53 582f
+2e5f 612e 7478 7455 580c 009b dc63 5c9a
+dc63 5c57 3c14 0063 6015 6367 6062 60f0
+4d4c 56f0 0f56 8850 8002 9018 0327 101b
+3130 30c6 0169 209f 7102 0351 c031 2424
+08c2 02e9 60e4 0032 3ad0 9430 43c5 f919
+18c4 93f3 73f5 120b 0a72 52f5 4252 2b4a
+5cf3 92f3 5332 f3d2 21fa c581 8400 0383
+1442 4d4e 6271 4969 716a 4a4a 6249 aa72
+4030 d41e 7520 91c9 c060 8e50 979b 5a92
+0854 9368 95ed ebe2 9398 949a 135f 5c92
+959d 9897 9f98 9596 9d93 9392 9666 9e51
+5a54 9169 6e52 5609 d45c 5a92 a66b 616d
+686c 6264 686e 6961 d27d 2739 0664 b0f4
+a373 6220 fa93 5d43 c3cb 53a6 4b57 702e
+daaa a4bf d8c3 2453 3022 7fff 8cf3 2d47
+1c0f 9d12 3a97 f329 b63a ffdc 875b 933b
+ceed 5256 9467 555c 7791 31fb e331 8d48
+21e9 4bde fd11 f24e 6fa2 ea53 7ce5 19ff
+e8f1 9e62 292b e44a 955a ef79 8edd e74c
+eb96 6379 22ca e993 19ca be04 28a8 856e
+6bb8 0300 504b 0708 3695 1560 2d01 0000
+9001 0000 504b 0304 0a00 0000 0000 0a88
+4d4e 0000 0000 0000 0000 0000 0000 0200
+1000 622f 5558 0c00 aadc 635c a3dc 635c
+573c 1400 504b 0304 1400 0800 0800 0a88
+4d4e 0000 0000 0000 0000 0000 0000 0700
+1000 622f 632e 7478 7455 580c 00a8 dc63
+5ca3 dc63 5c57 3c14 002b c9c8 2c56 00a2
+b4a2 fc5c 8564 3d00 504b 0708 b2fa 1a73
+0f00 0000 0f00 0000 504b 0304 0a00 0000
+0000 0d88 4d4e 0000 0000 0000 0000 0000
+0000 0b00 1000 5f5f 4d41 434f 5358 2f62
+2f55 580c 00aa dc63 5caa dc63 5c57 3cec
+8250 4b03 0414 0008 0008 000a 884d 4e00
+0000 0000 0000 0000 0000 0012 0010 005f
+5f4d 4143 4f53 582f 622f 2e5f 632e 7478
+7455 580c 00a8 dc63 5ca3 dc63 5c57 3c14
+0063 6015 6367 6062 60f0 4d4c 56f0 0f56
+8850 8002 9018 0327 101b 01f1 4620 06f1
+1f33 1005 1c43 4282 a04c 908e 2340 2c8f
+a684 092a cecf c020 9e9c 9fab 9758 5090
+93aa 1792 5a51 e29a 979c 9f92 9997 0e51
+7719 8805 1818 a410 6a72 128b 4b4a 8b53
+5352 124b 5295 0382 418a 4a4b d274 2dac
+0d8d 4d8c 0ccd 2d2d 4ce6 dd49 8e01 0957
+7b69 aa82 6800 504b 0708 7d78 286a 8500
+0000 e300 0000 504b 0102 1503 1400 0800
+0800 0588 4d4e 3098 2c41 0f00 0000 0f00
+0000 0500 0c00 0000 0000 0000 0040 a481
+0000 0000 612e 7478 7455 5808 009b dc63
+5c9a dc63 5c50 4b01 0215 030a 0000 0000
+000d 884d 4e00 0000 0000 0000 0000 0000
+0009 000c 0000 0000 0000 0000 40fd 4152
+0000 005f 5f4d 4143 4f53 582f 5558 0800
+aadc 635c aadc 635c 504b 0102 1503 1400
+0800 0800 0588 4d4e 3695 1560 2d01 0000
+9001 0000 1000 0c00 0000 0000 0000 0040
+a481 8900 0000 5f5f 4d41 434f 5358 2f2e
+5f61 2e74 7874 5558 0800 9bdc 635c 9adc
+635c 504b 0102 1503 0a00 0000 0000 0a88
+4d4e 0000 0000 0000 0000 0000 0000 0200
+0c00 0000 0000 0000 0040 ed41 0402 0000
+622f 5558 0800 aadc 635c a3dc 635c 504b
+0102 1503 1400 0800 0800 0a88 4d4e b2fa
+1a73 0f00 0000 0f00 0000 0700 0c00 0000
+0000 0000 0040 a481 3402 0000 622f 632e
+7478 7455 5808 00a8 dc63 5ca3 dc63 5c50
+4b01 0215 030a 0000 0000 000d 884d 4e00
+0000 0000 0000 0000 0000 000b 000c 0000
+0000 0000 0000 40fd 4188 0200 005f 5f4d
+4143 4f53 582f 622f 5558 0800 aadc 635c
+aadc 635c 504b 0102 1503 1400 0800 0800
+0a88 4d4e 7d78 286a 8500 0000 e300 0000
+1200 0c00 0000 0000 0000 0040 a481 c102
+0000 5f5f 4d41 434f 5358 2f62 2f2e 5f63
+2e74 7874 5558 0800 a8dc 635c a3dc 635c
+504b 0506 0000 0000 0700 0700 da01 0000
+9603 0000 0000 
+</code></pre><p>Mac下的ZIP文件存储采用的是utf-8编码，我们根据ZIP文件的结构进行对照解析，通过固定值标识以及偏移找到对应字段的数据值，非内容字段值存储采用的是<a href="http://www.ruanyifeng.com/blog/2016/11/byte-order.html" target="_blank" rel="noopener">小端字节序</a>，下面表格列出的值都已转换成了我们能阅读的大端字节序，源文件数据储存区解析（部分字段）如下表：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>值</th>
+<th>解析 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>local file header signature</td>
+<td>0x04034b50</td>
+<td>固定值  </td>
+</tr>
+<tr>
+<td>version needed to extract</td>
+<td>0x0014</td>
+<td>20/10=2 20%10=0 最低ZIP规范版本为2.0</td>
+</tr>
+<tr>
+<td>general purpose bit flag</td>
+<td>0x0008</td>
+<td>0000 0000 0000 1000（第3位Bit为1）</td>
+</tr>
+<tr>
+<td>file name length</td>
+<td>0x0005</td>
+<td>文件名长度为 5 Bytes</td>
+</tr>
+<tr>
+<td>file name</td>
+<td>0x612e747874</td>
+<td>a.txt</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>值</th>
+<th>解析 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>local file header signature</td>
+<td>0x04034b50</td>
+<td>固定值  </td>
+</tr>
+<tr>
+<td>file name length</td>
+<td>0x0009</td>
+<td>文件名长度为 9 Bytes</td>
+</tr>
+<tr>
+<td>file name</td>
+<td>0x5f5f4d41434f53582f</td>
+<td>__MACOSX/</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>值</th>
+<th>解析 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>local file header signature</td>
+<td>0x04034b50</td>
+<td>固定值  </td>
+</tr>
+<tr>
+<td>file name length</td>
+<td>0x0010</td>
+<td>文件名长度为 9 Bytes</td>
+</tr>
+<tr>
+<td>file name</td>
+<td>0x5f5f4d41434f53582f2e</td>
+<td>__MACOSX/.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>值</th>
+<th>解析 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>local file header signature</td>
+<td>0x04034b50</td>
+<td>固定值  </td>
+</tr>
+<tr>
+<td>file name length</td>
+<td>0x0002</td>
+<td>文件名长度为 2 Bytes</td>
+</tr>
+<tr>
+<td>file name</td>
+<td>0x622f</td>
+<td>b/</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>值</th>
+<th>解析 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>local file header signature</td>
+<td>0x04034b50</td>
+<td>固定值  </td>
+</tr>
+<tr>
+<td>file name length</td>
+<td>0x0007</td>
+<td>文件名长度为 7 Bytes</td>
+</tr>
+<tr>
+<td>file name</td>
+<td>0x622f632e747874</td>
+<td>b/c.txt</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>值</th>
+<th>解析 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>local file header signature</td>
+<td>0x04034b50</td>
+<td>固定值  </td>
+</tr>
+<tr>
+<td>file name length</td>
+<td>0x000b</td>
+<td>文件名长度为 11 Bytes</td>
+</tr>
+<tr>
+<td>file name</td>
+<td>0x5f5f4d41434f53582f622f</td>
+<td>__MACOSX/b/</td>
+</tr>
+</tbody>
+</table>
+<p>……（还有文件，不看了，眼睛都看花了，一大堆Mac文件系统的隐藏文件也打进ZIP了）</p>
+<p>中心目录区跟中心目录结束标识区也可以按照相同的方法进行手动解析，在此就不一一验证了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>由此，也算了解了ZIP压缩文件的基本格式，还有些问题需要探究，在此记录一下，后续有需求的话再来钻研。</p>
+<ol>
+<li>ZIP格式的中心目录区的意义？ 能想到的有两点，一是因为中心目录区的存在，可以在不解压文件的情况下快速列出ZIP的目录；二是中心目录区文件头的偏移值能够快速定位到对应的源文件储存区的位置。</li>
+<li>ZIP的压缩方式？加密方式？</li>
+<li>源文件储存区的数据是如何保证完整性的，也就是数据进行数字签名的方式等等。</li>
+<li>[archive decryption header]、[archive extra data record]等。</li>
+</ol>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul>
+<li><a href="https://pkware.cachefly.net/webdocs/APPNOTE/APPNOTE-6.2.0.txt" target="_blank" rel="noopener">ZIP官方规范文档</a></li>
+<li><a href="https://hellohxk.com/blog/archives/" target="_blank" rel="noopener">ZIP格式解析</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/11/byte-order.html" target="_blank" rel="noopener">理解字节序</a></li>
+</ul>
+
+            </div>
+            <hr>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff;
+        background-color: #22AB38;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff;
+        background-color: #019FE8;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a class="reward-link btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs">
+                        <li class="tab wechat-tab waves-effect waves-light"><a class="active" href="#wechat">微信</a></li>
+                        <li class="tab alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                    </ul>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#reward .reward-link').on('click', function () {
+            $('#rewardModal').openModal();
+        });
+
+        $('#rewardModal .close').on('click', function () {
+            $('#rewardModal').closeModal();
+        });
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            <div class="reprint">
+                <p>
+                    <span class="reprint-tip">转载请注明: </span>
+                    <a href="http://yoursite.com" class="b-link-green">ThisMJ</a>
+                    <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
+                    <a href="/2019/02/14/qian-xi-zip-ge-shi/" class="b-link-green">浅析ZIP格式</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '8b46f7887f2b6352c693',
+        clientSecret: '788fa073b4ebd2c51f4b4a7b9258efee7cf51d22',
+        repo: 'thismj.github.io',
+        owner: 'thismj',
+        admin: ["thismj"],
+        id: '2019-02-14T19-34-43',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">本篇</div>
+            <div class="card">
+                <a href="/2019/02/14/qian-xi-zip-ge-shi/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="浅析ZIP格式">
+                        
+                        <span class="card-title">浅析ZIP格式</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">
+ZIP文件格式是一种数据压缩和文档储存的文件格式，原名Deflate，发明者为菲尔·卡茨（Phil Katz），他于1989年1月公布了该格式的资料。ZIP通常使用后缀名“.zip”，它的MIME格式为application/zip。
+
+</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-02-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/杂项/" class="post-category" target="_blank">
+                                    杂项
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/ZIP/" target="_blank">
+                        <span class="chip bg-color">ZIP</span>
+                    </a>
+                    
+                    <a href="/tags/压缩/" target="_blank">
+                        <span class="chip bg-color">压缩</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">下一篇</div>
+            <div class="card">
+                <a href="/2019/01/24/gradle-for-android-zhi-zha-ji-yi/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="Android》之札记一">
+                        
+                        <span class="card-title">Android》之札记一</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary"></div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-01-24
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-user fa-fw"></i>
+                            ThisMJ
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: ThisMJ<br />'
+            + '作者: ThisMJ<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+    </div>
+    <div class="col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title">目录</div>
+            <div id="toc-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            本站由&copy;<a href="https://blinkfox.github.io/" target="_blank">Blinkfox</a>基于
+            <a href="https://hexo.io/" target="_blank">Hexo</a> 采用
+            <a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">hexo-theme-matery</a>的主题搭建.
+        </div>
+        <div class="col s12 m4 l4 social-link"><a href="https://github.com/thismj" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+    <i class="fa fa-github"></i>
+</a>
+<a href="mailto:thiscrazymj@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+    <i class="fa fa-envelope-open"></i>
+</a>
+
+<a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+    <i class="fa fa-rss"></i>
+</a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title">搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input" autofocus>
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/js/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+
+<script src="/libs/others/clicklove.js"></script>
+
+<script src="/js/matery.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116677145-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-116677145-1');
+</script>
+
+
+</body>
+</html>
