@@ -86,10 +86,10 @@ hr {
 }
 
 blockquote {
-    border-left: 5px solid #42b983;
+    border-left: 5px solid #2196F3;
     padding: 1rem 0.8rem 0.2rem 0.8rem;
     color: #666;
-    background-color: rgba(66, 185, 131, .1);
+    background-color: rgba(33, 150, 243, .1);
 }
 
 pre {
@@ -103,6 +103,7 @@ pre {
 
 code {
     padding: 1px 5px;
+    font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier, monospace;
     font-size: 0.91rem;
     color: #e96900;
     background-color: #f8f8f8;
@@ -166,7 +167,11 @@ mark {
 }
 
 .text-color {
-    color: #6E7FF3 !important;
+    color: #f44336 !important;
+}
+
+.white-color {
+    color: #fff;
 }
 
 /*头部导航栏样式*/
@@ -214,7 +219,7 @@ header .brand-logo .logo-img {
 }
 
 header .brand-logo .logo-span {
-    font-size: 1.8rem;
+    font-size: 2rem;
 }
 
 header .button-collapse i {
@@ -399,7 +404,7 @@ header .go-back i {
 }
 
 @-webkit-keyframes rainbow {
-   /* 0%,
+    /*0%,
     100% {
         background: rgba(156, 39, 176, 0.75);
         background: linear-gradient(45deg, rgba(156, 39, 176, 0.75) 0%, rgba(156, 39, 176, 0.65) 100%);
@@ -478,16 +483,37 @@ header .go-back i {
     }*/
 }
 
-.recommend {
-    margin-top: 20px;
-}
-
-.notice {
+.index-card {
     margin-top: -40px;
 }
 
-.notice .card {
-    border-radius: 5px;
+.dream {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.dream .title,
+.music-player .title,
+.video-player .title {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.dream .text {
+    opacity: .6;
+    font-size: 1.1rem;
+}
+
+.music-player,
+.video-player {
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+
+.music,
+.dplayer-video {
+    box-shadow: 0 5px 20px 0 rgba(0,0,0,.2), 0 10px 20px -12px rgba(0,0,0,.5) !important;
 }
 
 #recommend-sections {
@@ -495,16 +521,11 @@ header .go-back i {
     padding-top: 30px;
 }
 
-.recommend .card .card-content {
+.index-card .card .card-content {
     padding: 20px 40px;
 }
 
 @media only screen and (min-width: 1418px) {
-    .notice {
-        margin-top: 30px;
-        padding: 0 0.75rem;
-    }
-
     .recommend {
         margin-top: 20px;
         padding: 0 0.75rem;
@@ -512,14 +533,14 @@ header .go-back i {
 }
 
 @media only screen and (max-width: 601px) {
-    .recommend .card .card-content {
+    .index-card .card .card-content {
         padding: 10px 10px;
     }
 }
 
 /*中等屏幕下(平板类)的样式*/
 @media only screen and (min-width: 600px) and (max-width: 992px) {
-    .recommend .card .card-content {
+    .index-card .card .card-content {
         padding: 20px 20px;
     }
 }
@@ -600,7 +621,7 @@ header .go-back i {
     height: 65px;
     max-height: 65px;
     font-size: 14px;
-    color: hsla(0, 0%, 100%, .7) !important;
+    color: hsla(0, 0%, 100%, .78) !important;
 }
 
 .recommend .post-card .read-more {
@@ -647,7 +668,7 @@ article a {
 
 article a:hover {
     font-weight: bold;
-    color: #42b983;
+    color: #F44336;
     text-decoration: underline;
 }
 
@@ -660,9 +681,14 @@ article .card {
     border-radius: 10px;
 }
 
+article .card-image {
+    background-color: #222;
+}
+
 article .card-image img {
     height: 220px;
     border-radius: 0.3rem;
+    opacity: .7;
 }
 
 article .tag-image img {
@@ -677,6 +703,7 @@ article .article-content .summary {
     padding-bottom: 2px;
     padding-left: 0;
     margin-bottom: 6px;
+    word-break: break-all;
 }
 
 article .article-content .publish-author {
@@ -784,22 +811,22 @@ article .article-tags .chip {
     0 2px 5px -5px rgba(0, 0, 0, .1) !important;
 }
 
+#artDetail .tag-cate {
+    padding-bottom: 15px;
+}
+
 #artDetail a {
     margin-right: 0 !important;
     text-transform: none !important;
 }
 
 #artDetail .article-info {
-    padding: 25px 48px 30px 50px;
-    margin-bottom: 20px;
+    padding: 20px 30px 1px 40px;
+    margin-bottom: -5px;
 }
 
 #artDetail .article-tag {
     float: left;
-}
-
-#artDetail .post-info {
-    float: right;
 }
 
 #artDetail .article-tag .chip {
@@ -813,8 +840,22 @@ article .article-tags .chip {
     margin-bottom: 2px;
 }
 
-#artDetail .post-info .post-cate {
-    margin-right: 15px;
+#artDetail .post-cate {
+    float: right;
+    color: #2196F3;
+}
+
+#artDetail .post-cate a {
+    padding-right: 5px;
+    color: #2196F3;
+    font-weight: 500;
+}
+
+#artDetail .post-cate a:hover {
+    text-decoration: underline;
+}
+
+#artDetail .post-info {
     color: #525f7f;
 }
 
@@ -833,14 +874,23 @@ article .article-tags .chip {
     color: #525f7f;
 }
 
+#artDetail .post-info .post-word-count {
+    margin-left: 15px;
+}
+
+#artDetail .post-info .post-read {
+    margin-left: 15px;
+    color: #525f7f;
+}
+
 #artDetail .article-card-content {
     padding: 0 15px 20px 18px;
 }
 
 @media only screen and (max-width: 601px) {
     #artDetail .article-info {
-        padding: 25px 15px 30px 18px;
-        margin-bottom: 20px;
+        padding: 15px 15px 1px 15px;
+        margin-bottom: -5px;
     }
 }
 
@@ -850,8 +900,8 @@ article .article-tags .chip {
     }
 
     #artDetail .article-info {
-        padding: 25px 30px 30px 32px;
-        margin-bottom: 20px;
+        padding: 15px 20px 0 28px;
+        margin-bottom: -5px;
     }
 }
 
@@ -892,11 +942,23 @@ article .article-tags .chip {
     color: #f44336;
     font-weight: 500;
     text-decoration: underline;
+    word-wrap:break-word;
+}
+
+#articleContent .img-item {
+    text-align: center;
 }
 
 #articleContent img {
     max-width: 100%;
     height: auto;
+    cursor: pointer;
+}
+
+#articleContent video {
+    display: block;
+    margin: 30px auto;
+    box-shadow: 0 5px 35px 0 rgba(0,0,0,.2), 0 10px 35px -11px rgba(0,0,0,.6);
     cursor: pointer;
 }
 
@@ -1009,7 +1071,7 @@ table tr:nth-child(2n), thead {
 
 .chip-container .chip:hover {
     color: #fff;
-    background: linear-gradient(to right, #4cbf30 0%, #0f9d58 100%) !important;
+    background: linear-gradient(to right, #4cbf30 0%, #f44336 100%) !important;
 }
 
 .chip .tag-length {
@@ -1084,7 +1146,7 @@ table tr:nth-child(2n), thead {
     left: 18px;
     height: 100%;
     width: 4px;
-    background: #0f9d58;
+    background: #f44336;
 }
 
 @media only screen and (min-width: 900px) {
@@ -1320,7 +1382,7 @@ table tr:nth-child(2n), thead {
     margin: 0 0.5rem;
     padding: 0;
     color: #fff;
-    background:  #F44336;
+    background: #F44336;
     font-size: 0.9rem;
     border-radius: 50%;
     box-shadow: 0 4px 6px rgba(50, 50, 93, .21), 0 2px 3px rgba(0, 0, 0, .1);
@@ -1522,12 +1584,17 @@ footer {
     padding-bottom: 1px;
 }
 
+footer .social-statis {
+    margin-top: 10px;
+    position: relative;
+}
+
 footer a {
     color: #fff;
 }
 
 footer .copy-right {
-    color: #d5d5d5;
+    color: #dbdbdb;
 }
 
 /*搜索层样式*/
@@ -1557,7 +1624,7 @@ footer .copy-right {
 
 .search-result-list .search-result-title {
     font-size: 1.4rem;
-    color: #42b983;
+    color: #F44336;
 }
 
 .search-result-list li {
@@ -1595,4 +1662,64 @@ footer .copy-right {
 .top-scroll .btn-floating i {
     line-height: 48px;
     font-size: 1.8rem;
+}
+
+@media screen and (min-width: 368px) and (max-width: 767px) {
+    .info-break-policy {
+        word-break: keep-all;
+        float: left;
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .info-break-policy {
+        word-break: keep-all;
+        float: left;
+        margin-right: 15px;
+    }
+}
+
+@media screen and (max-width: 367px) {
+    .info-break-policy {
+        word-break: keep-all;
+        float: left;
+        width: 100%;
+    }
+
+    .custom-card {
+        padding: 0 2px !important;
+    }
+}
+
+.info-break-policy {
+    margin-bottom: 8px;
+}
+
+.clearfix {
+    clear: left;
+}
+
+.img-shadow {
+    box-shadow: 0 5px 25px 0 rgba(0,0,0,.2), 0 10px 30px -11px rgba(0,0,0,.6)
+}
+
+.img-margin {
+    margin: 25px auto 10px auto;
+}
+
+.caption {
+    text-align: center;
+    margin: 0 auto 15px auto;
+}
+
+.center-caption {
+    color: #525f7f;
+    padding: 5px;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.lg-sub-html .center-caption {
+    color: #fff !important;
+    border-bottom: none;
 }
