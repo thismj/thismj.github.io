@@ -3,7 +3,6 @@ title: Mac OS之Android源码下载、编译、刷机
 date: 2018-09-13 09:25:00
 author: ThisMJ
 img: /medias/images/2018-09-13.jpeg 
-top: true
 mathjax: false
 categories: Android
 tags:

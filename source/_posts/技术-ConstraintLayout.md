@@ -3,7 +3,6 @@ title: 从需求探索ConstraintLayout
 date: 2018-12-01 09:25:00
 author: ThisMJ
 img: /medias/images/2018-12-01.jpeg 
-top: true
 mathjax: false
 categories: Android
 tags:
