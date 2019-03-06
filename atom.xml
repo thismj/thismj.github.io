@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-02-15T02:08:19.475Z</updated>
+  <updated>2019-03-06T09:48:33.706Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>AAPT命令行使用实践</title>
+    <link href="http://yoursite.com/2019/03/06/aapt-ming-ling-xing-shi-yong-shi-jian/"/>
+    <id>http://yoursite.com/2019/03/06/aapt-ming-ling-xing-shi-yong-shi-jian/</id>
+    <published>2019-03-06T09:45:11.000Z</published>
+    <updated>2019-03-06T09:48:33.706Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;环境&quot;&gt;&lt;a href=&quot;#环境&quot; class=&quot;headerlink&quot; title=&quot;环境&quot;&gt;&lt;/a&gt;环境&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;操作系统：Mac OS High Sierra 10.13.2 (17C88)&lt;/li&gt;
+&lt;li&gt;Android SDK
+        
+      
+    
+    </summary>
+    
+      <category term="Android" scheme="http://yoursite.com/categories/Android/"/>
+    
+    
+      <category term="AAPT" scheme="http://yoursite.com/tags/AAPT/"/>
+    
+  </entry>
   
   <entry>
     <title>浅析ZIP格式</title>
@@ -42,6 +70,20 @@
       <category term="ZIP" scheme="http://yoursite.com/tags/ZIP/"/>
     
       <category term="压缩" scheme="http://yoursite.com/tags/%E5%8E%8B%E7%BC%A9/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android》之札记一</title>
+    <link href="http://yoursite.com/2019/01/24/gradle-for-android-zhi-zha-ji-yi/"/>
+    <id>http://yoursite.com/2019/01/24/gradle-for-android-zhi-zha-ji-yi/</id>
+    <published>2019-01-24T04:13:25.313Z</published>
+    <updated>2019-01-24T04:13:25.313Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
     
   </entry>
   

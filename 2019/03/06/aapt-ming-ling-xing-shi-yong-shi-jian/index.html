@@ -1,0 +1,1446 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="AAPT命令行使用实践, ThisMJ">
+    <meta name="description" content="环境
+操作系统：Mac OS High Sierra 10.13.2 (17C88)
+Android SDK Build Tool版本：28.0.3
+
+AAPT是什么AAPT 即 Android Asset Packaging Tool，它">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>AAPT命令行使用实践 | ThisMJ</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="container">
+            <div class="nav-wrapper">
+                <div class="brand-logo">
+                    <a href="/" class="waves-effect waves-light">
+                        
+                        <img src="/medias/logo.png" class="logo-img hide-on-small-only">
+                        
+                        <span class="logo-span">ThisMJ</span>
+                    </a>
+                </div>
+                
+
+<a href="#" data-activates="mobile-nav" class="button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li>
+        <a id="toggleSearch" class="waves-effect waves-light">
+            <i id="searchIcon" class="mdi-action-search" title="搜索"></i>
+        </a>
+    </li>
+
+</ul>
+
+<div class="side-nav" id="mobile-nav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">ThisMJ</div>
+        <div class="logo-desc">
+            
+            不忘初心，砥砺前行
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        
+    </ul>
+
+    <div class="social-link">
+    <a href="https://github.com/thismj" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:thiscrazymj@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+</div>
+
+            </div>
+        </div>
+
+        
+    </nav>
+</header>
+
+
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('嘿嘿嘿嘿，你知道密码不？')).toString(CryptoJS.enc.Hex)) {
+                alert('输得啥玩意儿。。。');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        AAPT命令行使用实践
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1,
+    #articleContent h2,
+    #articleContent h3,
+    #articleContent h4,
+    #articleContent h5,
+    #articleContent h6 {
+        padding-top: 76px;
+        margin-top: -76px;
+    }
+
+    #articleContent h1 {
+        line-height: 3.5rem;
+    }
+
+    #articleContent h2 {
+        line-height: 3.2rem;
+    }
+
+    #articleContent h3 {
+        line-height: 2.8rem;
+    }
+
+    #articleContent h4 {
+        line-height: 2.5rem;
+    }
+
+    #articleContent h5 {
+        line-height: 2.2rem;
+    }
+
+    #articleContent h6 {
+        line-height: 1.9rem;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #f44336;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #f44336;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #f44336;
+    }
+</style>
+<div class="row">
+    <div class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/AAPT/" target="_blank">
+                                <span class="chip bg-color">AAPT</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Android/" class="post-category" target="_blank">
+                                Android
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2019-03-06
+                </div>
+
+                
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
+                        3.3k
+                    </div>
+                    
+
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                        17 分
+                    </div>
+                    
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
+<li>操作系统：Mac OS High Sierra 10.13.2 (17C88)</li>
+<li>Android SDK Build Tool版本：28.0.3</li>
+</ul>
+<h2 id="AAPT是什么"><a href="#AAPT是什么" class="headerlink" title="AAPT是什么"></a>AAPT是什么</h2><p>AAPT 即 Android Asset Packaging Tool，它是 Android SDK 自带的一个命令行工具，是 Android 构建系统的一部分。AAPT可以查看、创建以及更新兼容 ZIP 格式的归档文件（.zip、.jar、.apk），在 Android 构建流程中，我们使用它来编译和打包项目的资源文件。</p>
+<p>可以在下面两个地方找到aapt工具：</p>
+<pre class=" language-bash"><code class="language-bash">Android SDK根目录/build-tools/xx.x.x/
+</code></pre>
+<pre class=" language-bash"><code class="language-bash">AOSP/out/host/darwin-x86/bin/
+</code></pre>
+<p>如果想要知道AAPT的实现原理，可以在下面位置阅读相关的源码：</p>
+<pre class=" language-bash"><code class="language-bash">AOSP/frameworks/base/tools/aapt/
+</code></pre>
+<h2 id="AAPT命令行实践"><a href="#AAPT命令行实践" class="headerlink" title="AAPT命令行实践"></a>AAPT命令行实践</h2><p>在命令行直接输入aapt，不带任何参数，我们可以看到详细的帮助文档：</p>
+<pre class=" language-bash"><code class="language-bash">➜ ~ aapt
+Android Asset Packaging Tool
+
+Usage:
+ aapt l<span class="token punctuation">[</span>ist<span class="token punctuation">]</span> <span class="token punctuation">[</span>-v<span class="token punctuation">]</span> <span class="token punctuation">[</span>-a<span class="token punctuation">]</span> file.<span class="token punctuation">{</span>zip,jar,apk<span class="token punctuation">}</span>
+   List contents of Zip-compatible archive.
+
+ aapt d<span class="token punctuation">[</span>ump<span class="token punctuation">]</span> <span class="token punctuation">[</span>--values<span class="token punctuation">]</span> <span class="token punctuation">[</span>--include-meta-data<span class="token punctuation">]</span> WHAT file.<span class="token punctuation">{</span>apk<span class="token punctuation">}</span> <span class="token punctuation">[</span>asset <span class="token punctuation">[</span>asset <span class="token punctuation">..</span>.<span class="token punctuation">]</span><span class="token punctuation">]</span>
+   strings          Print the contents of the resource table string pool <span class="token keyword">in</span> the APK.
+   badging          Print the label and icon <span class="token keyword">for</span> the app declared <span class="token keyword">in</span> APK.
+   permissions      Print the permissions from the APK.
+   resources        Print the resource table from the APK.
+   configurations   Print the configurations <span class="token keyword">in</span> the APK.
+   xmltree          Print the compiled xmls <span class="token keyword">in</span> the given assets.
+   xmlstrings       Print the strings of the given compiled xml assets.
+
+ aapt p<span class="token punctuation">[</span>ackage<span class="token punctuation">]</span> <span class="token punctuation">[</span>-d<span class="token punctuation">]</span><span class="token punctuation">[</span>-f<span class="token punctuation">]</span><span class="token punctuation">[</span>-m<span class="token punctuation">]</span><span class="token punctuation">[</span>-u<span class="token punctuation">]</span><span class="token punctuation">[</span>-v<span class="token punctuation">]</span><span class="token punctuation">[</span>-x<span class="token punctuation">]</span><span class="token punctuation">[</span>-z<span class="token punctuation">]</span><span class="token punctuation">[</span>-M AndroidManifest.xml<span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>-0 extension <span class="token punctuation">[</span>-0 extension <span class="token punctuation">..</span>.<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token punctuation">[</span>-g tolerance<span class="token punctuation">]</span> <span class="token punctuation">[</span>-j jarfile<span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>--debug-mode<span class="token punctuation">]</span> <span class="token punctuation">[</span>--min-sdk-version VAL<span class="token punctuation">]</span> <span class="token punctuation">[</span>--target-sdk-version VAL<span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>--app-version VAL<span class="token punctuation">]</span> <span class="token punctuation">[</span>--app-version-name TEXT<span class="token punctuation">]</span> <span class="token punctuation">[</span>--custom-package VAL<span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>--rename-manifest-package PACKAGE<span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>--rename-instrumentation-target-package PACKAGE<span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>--utf16<span class="token punctuation">]</span> <span class="token punctuation">[</span>--auto-add-overlay<span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>--max-res-version VAL<span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>-I base-package <span class="token punctuation">[</span>-I base-package <span class="token punctuation">..</span>.<span class="token punctuation">]</span><span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>-A asset-source-dir<span class="token punctuation">]</span>  <span class="token punctuation">[</span>-G class-list-file<span class="token punctuation">]</span> <span class="token punctuation">[</span>-P public-definitions-file<span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>-D main-dex-class-list-file<span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>-S resource-sources <span class="token punctuation">[</span>-S resource-sources <span class="token punctuation">..</span>.<span class="token punctuation">]</span><span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>-F apk-file<span class="token punctuation">]</span> <span class="token punctuation">[</span>-J R-file-dir<span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>--product product1,product2,<span class="token punctuation">..</span>.<span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>-c CONFIGS<span class="token punctuation">]</span> <span class="token punctuation">[</span>--preferred-density DENSITY<span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>--split CONFIGS <span class="token punctuation">[</span>--split CONFIGS<span class="token punctuation">]</span><span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>--feature-of package <span class="token punctuation">[</span>--feature-after package<span class="token punctuation">]</span><span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>raw-files-dir <span class="token punctuation">[</span>raw-files-dir<span class="token punctuation">]</span> <span class="token punctuation">..</span>.<span class="token punctuation">]</span> \
+        <span class="token punctuation">[</span>--output-text-symbols DIR<span class="token punctuation">]</span>
+
+   Package the android resources.  It will <span class="token function">read</span> assets and resources that are
+   supplied with the -M -A -S or raw-files-dir arguments.  The -J -P -F and -R
+   options control <span class="token function">which</span> files are output.
+
+ aapt r<span class="token punctuation">[</span>emove<span class="token punctuation">]</span> <span class="token punctuation">[</span>-v<span class="token punctuation">]</span> file.<span class="token punctuation">{</span>zip,jar,apk<span class="token punctuation">}</span> file1 <span class="token punctuation">[</span>file2 <span class="token punctuation">..</span>.<span class="token punctuation">]</span>
+   Delete specified files from Zip-compatible archive.
+
+ aapt a<span class="token punctuation">[</span>dd<span class="token punctuation">]</span> <span class="token punctuation">[</span>-v<span class="token punctuation">]</span> file.<span class="token punctuation">{</span>zip,jar,apk<span class="token punctuation">}</span> file1 <span class="token punctuation">[</span>file2 <span class="token punctuation">..</span>.<span class="token punctuation">]</span>
+   Add specified files to Zip-compatible archive.
+
+ aapt c<span class="token punctuation">[</span>runch<span class="token punctuation">]</span> <span class="token punctuation">[</span>-v<span class="token punctuation">]</span> -S resource-sources <span class="token punctuation">..</span>. -C output-folder <span class="token punctuation">..</span>.
+   Do PNG preprocessing on one or several resource folders
+   and store the results <span class="token keyword">in</span> the output folder.
+
+ aapt s<span class="token punctuation">[</span>ingleCrunch<span class="token punctuation">]</span> <span class="token punctuation">[</span>-v<span class="token punctuation">]</span> -i input-file -o outputfile
+   Do PNG preprocessing on a single file.
+
+ aapt v<span class="token punctuation">[</span>ersion<span class="token punctuation">]</span>
+   Print program version.
+</code></pre>
+<p>为了便于实验，我们新建一个 Android Demo 工程，并生成一个 demo.apk 文件待用。下面对 aapt 工具的命令一一进行实践（注意！！！输出太长的地方加了省略符号）。</p>
+<h3 id="命令-v-ersion"><a href="#命令-v-ersion" class="headerlink" title="命令 v[ersion]"></a>命令 v[ersion]</h3><p>打印aapt的版本号：</p>
+<pre class=" language-bash"><code class="language-bash">➜ ~ aapt <span class="token function">v</span>
+Android Asset Packaging Tool, v0.2-5016651
+</code></pre>
+<h3 id="命令-l-ist"><a href="#命令-l-ist" class="headerlink" title="命令 l[ist]"></a>命令 l[ist]</h3><p>查看兼容 ZIP 格式归档文件的内容，可选的命令参数如下表：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-v</td>
+<td style="text-align:left">列出归档文件内容的详细信息，类似’unzip -l -v’</td>
+</tr>
+<tr>
+<td style="text-align:left">-a</td>
+<td style="text-align:left">列出apk文件的资源索引表以及Android manifest的详细内容</td>
+</tr>
+</tbody>
+</table>
+<p><br>我们使用上面生成的 demo.apk 来查看命令执行结果：</p>
+<pre class=" language-bash"><code class="language-bash">➜ aapt l app/build/outputs/apk/debug/demo.apk 
+AndroidManifest.xml
+META-INF/CERT.RSA
+META-INF/CERT.SF
+META-INF/MANIFEST.MF
+assets/assets.txt
+classes.dex
+res/drawable-anydpi-v21/ic_launcher_background.xml
+res/drawable-xxxhdpi-v4/ic_launcher_background.png
+res/layout/activity_main.xml
+res/mipmap-hdpi-v4/ic_launcher.png
+<span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span>
+res/raw/raw.txt
+resources.arsc
+</code></pre>
+<p>带-v参数：</p>
+<pre class=" language-bash"><code class="language-bash">➜ aapt l -v app/build/outputs/apk/debug/demo.apk
+Archive:  app/build/outputs/apk/debug/demo.apk
+ Length   Method    Size  Ratio   Offset      Date  Time  CRC-32    Name
+--------  ------  ------- -----  -------      ----  ----  ------    ----
+    2096  Deflate     772  63%    121428  11-30-79 00:00  ffffffffdf4f467e  AndroidManifest.xml
+     773  Deflate     603  22%    195990  11-30-79 00:00  09bb8857  META-INF/CERT.RSA
+    2006  Deflate     957  52%    194987  11-30-79 00:00  ffffffff89d38cd0  META-INF/CERT.SF
+    1969  Deflate     938  52%    193999  11-30-79 00:00  fffffffff46ceacc  META-INF/MANIFEST.MF
+      16  Stored       16   0%    112384  11-30-79 00:00  ffffffffe2d2eeaf  assets/assets.txt
+  231704  Deflate  112343  52%         0  11-30-79 00:00  ffffffff8149f570  classes.dex
+    5696  Deflate     982  83%    122249  11-30-79 00:00  0c9d0923  res/drawable-anydpi-v21/ic_launcher_background.xml
+    4708  Stored     4708   0%    160564  11-30-79 00:00  ffffffffc0e2b4a8  res/drawable-xxxhdpi-v4/ic_launcher_background.png
+     876  Deflate     389  56%    112525  11-30-79 00:00  029eb45b  res/layout/activity_main.xml
+    2963  Stored     2963   0%    133287  11-30-79 00:00  78bc849d  res/mipmap-hdpi-v4/ic_launcher.png
+    4905  Stored     4905   0%    125444  11-30-79 00:00  ffffffffac8a9f01  res/mipmap-hdpi-v4/ic_launcher_round.png
+<span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span>
+      17  Stored       17   0%    112456  11-30-79 00:00  fffffffffd969fde  res/raw/raw.txt
+    8412  Stored     8412   0%    112972  11-30-79 00:00  ffffffffeb638dbe  resources.arsc
+--------          -------  ---                            -------
+  323429           195293  40%                            21 files
+
+</code></pre>
+<p>带-a参数：</p>
+<pre class=" language-bas"><code class="language-bas">➜ aapt l -a app/build/outputs/apk/debug/demo.apk
+AndroidManifest.xml
+META-INF/CERT.RSA
+META-INF/CERT.SF
+META-INF/MANIFEST.MF
+assets/assets.txt
+classes.dex
+res/drawable-anydpi-v21/ic_launcher_background.xml
+res/drawable-xxxhdpi-v4/ic_launcher_background.png
+......
+res/raw/raw.txt
+resources.arsc
+
+Resource table:
+Package Groups (1)
+Package Group 0 id=0x7f packageCount=1 name=cn.thismj.demo
+  Package 0 id=0x7f name=cn.thismj.demo
+    type 0 configCount=1 entryCount=57
+      spec resource 0x7f010000 cn.thismj.demo:attr/barrierAllowsGoneWidgets: flags=0x00000000
+      spec resource 0x7f010001 cn.thismj.demo:attr/barrierDirection: flags=0x00000000
+      ......
+      spec resource 0x7f010038 cn.thismj.demo:attr/layout_optimizationLevel: flags=0x00000000
+      config (default):
+        resource 0x7f010000 cn.thismj.demo:attr/barrierAllowsGoneWidgets: <bag>
+        resource 0x7f010001 cn.thismj.demo:attr/barrierDirection: <bag>
+        ......
+        resource 0x7f010037 cn.thismj.demo:attr/layout_goneMarginTop: <bag>
+        resource 0x7f010038 cn.thismj.demo:attr/layout_optimizationLevel: <bag>
+    ......
+    type 2 configCount=2 entryCount=1
+      spec resource 0x7f030000 cn.thismj.demo:drawable/ic_launcher_background: flags=0x00000500
+      config xxxhdpi:
+        resource 0x7f030000 cn.thismj.demo:drawable/ic_launcher_background: t=0x03 d=0x00000002 (s=0x0008 r=0x00)
+      config anydpi-v21:
+        resource 0x7f030000 cn.thismj.demo:drawable/ic_launcher_background: t=0x03 d=0x00000001 (s=0x0008 r=0x00)
+    ......
+    type 8 configCount=1 entryCount=1
+      spec resource 0x7f090000 cn.thismj.demo:style/AppTheme: flags=0x00000000
+      config (default):
+        resource 0x7f090000 cn.thismj.demo:style/AppTheme: <bag>
+
+Android manifest:
+N: android=http://schemas.android.com/apk/res/android
+  E: manifest (line=2)
+    A: android:versionCode(0x0101021b)=(type 0x10)0x1
+    A: android:versionName(0x0101021c)="1.0" (Raw: "1.0")
+    ......
+    E: uses-sdk (line=7)
+      A: android:minSdkVersion(0x0101020c)=(type 0x10)0x13
+      A: android:targetSdkVersion(0x01010270)=(type 0x10)0x1c
+    E: application (line=11)
+      A: android:theme(0x01010000)=@0x7f090000
+      A: android:label(0x01010001)=@0x7f080000
+      ......
+      A: android:roundIcon(0x0101052c)=@0x7f060001
+      E: activity (line=20)
+        A: android:name(0x01010003)="cn.thismj.demo.MainActivity" (Raw: "cn.thismj.demo.MainActivity")
+        E: intent-filter (line=21)
+          E: action (line=22)
+            A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+          E: category (line=24)
+            A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
+</bag></bag></bag></bag></bag></code></pre>
+<h3 id="命令-d-ump"><a href="#命令-d-ump" class="headerlink" title="命令 d[ump]"></a>命令 d[ump]</h3><p>指定不同的子命令dump出对应的内容，如下表：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">子命令</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">strings</td>
+<td style="text-align:left">列出apk中资源表的字符串池</td>
+</tr>
+<tr>
+<td style="text-align:left">badging</td>
+<td style="text-align:left">列出apk中清单文件声明的属性标签跟应用图标</td>
+</tr>
+<tr>
+<td style="text-align:left">permissions</td>
+<td style="text-align:left">列出apk清单文件声明的权限</td>
+</tr>
+<tr>
+<td style="text-align:left">resources</td>
+<td style="text-align:left">列出apk文件的资源索引表</td>
+</tr>
+<tr>
+<td style="text-align:left">configurations</td>
+<td style="text-align:left">列出apk资源声明的所有配置</td>
+</tr>
+<tr>
+<td style="text-align:left">xmltree</td>
+<td style="text-align:left">解析并打印指定被编译的二进制xml文件的元素</td>
+</tr>
+<tr>
+<td style="text-align:left">xmlstrings</td>
+<td style="text-align:left">解析并打印指定被编译的二进制xml文件的字符串池</td>
+</tr>
+</tbody>
+</table>
+<h4 id="strings"><a href="#strings" class="headerlink" title="strings"></a>strings</h4><pre class=" language-bash"><code class="language-bash">➜ aapt d strings app/build/outputs/apk/debug/demo.apk
+String pool of 15 unique UTF-8 non-sorted strings, 15 entries and 0 styles using 664 bytes:
+String <span class="token comment" spellcheck="true">#0: Demo</span>
+String <span class="token comment" spellcheck="true">#1: res/drawable-anydpi-v21/ic_launcher_background.xml</span>
+String <span class="token comment" spellcheck="true">#2: res/drawable-xxxhdpi-v4/ic_launcher_background.png</span>
+String <span class="token comment" spellcheck="true">#3: res/layout/activity_main.xml</span>
+String <span class="token comment" spellcheck="true">#4: res/mipmap-hdpi-v4/ic_launcher.png</span>
+<span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span>
+String <span class="token comment" spellcheck="true">#12: res/mipmap-xxxhdpi-v4/ic_launcher.png</span>
+String <span class="token comment" spellcheck="true">#13: res/mipmap-xxxhdpi-v4/ic_launcher_round.png</span>
+String <span class="token comment" spellcheck="true">#14: res/raw/raw.txt</span>
+</code></pre>
+<h4 id="badging"><a href="#badging" class="headerlink" title="badging"></a>badging</h4><pre class=" language-bash"><code class="language-bash">➜ aapt d badging app/build/outputs/apk/debug/demo.apk
+package: name<span class="token operator">=</span><span class="token string">'cn.thismj.demo'</span> versionCode<span class="token operator">=</span><span class="token string">'1'</span> versionName<span class="token operator">=</span><span class="token string">'1.0'</span> compileSdkVersion<span class="token operator">=</span><span class="token string">'28'</span> compileSdkVersionCodename<span class="token operator">=</span><span class="token string">'9'</span>
+sdkVersion:<span class="token string">'19'</span>
+targetSdkVersion:<span class="token string">'28'</span>
+uses-permission: name<span class="token operator">=</span><span class="token string">'android.permission.WRITE_EXTERNAL_STORAGE'</span>
+uses-permission: name<span class="token operator">=</span><span class="token string">'android.permission.INTERNET'</span>
+application-label:<span class="token string">'Demo'</span>
+application-icon-160:<span class="token string">'res/mipmap-mdpi-v4/ic_launcher.png'</span>
+application-icon-240:<span class="token string">'res/mipmap-hdpi-v4/ic_launcher.png'</span>
+application-icon-320:<span class="token string">'res/mipmap-xhdpi-v4/ic_launcher.png'</span>
+application-icon-480:<span class="token string">'res/mipmap-xxhdpi-v4/ic_launcher.png'</span>
+application-icon-640:<span class="token string">'res/mipmap-xxxhdpi-v4/ic_launcher.png'</span>
+application-icon-65534:<span class="token string">'res/mipmap-mdpi-v4/ic_launcher.png'</span>
+application: label<span class="token operator">=</span><span class="token string">'Demo'</span> icon<span class="token operator">=</span><span class="token string">'res/mipmap-mdpi-v4/ic_launcher.png'</span>
+testOnly<span class="token operator">=</span><span class="token string">'-1'</span>
+application-debuggable
+launchable-activity: name<span class="token operator">=</span><span class="token string">'cn.thismj.demo.MainActivity'</span>  label<span class="token operator">=</span><span class="token string">''</span> icon<span class="token operator">=</span><span class="token string">''</span>
+uses-permission: name<span class="token operator">=</span><span class="token string">'android.permission.READ_EXTERNAL_STORAGE'</span>
+uses-implied-permission: name<span class="token operator">=</span><span class="token string">'android.permission.READ_EXTERNAL_STORAGE'</span> reason<span class="token operator">=</span><span class="token string">'requested WRITE_EXTERNAL_STORAGE'</span>
+feature-group: label<span class="token operator">=</span><span class="token string">''</span>
+  uses-feature: name<span class="token operator">=</span><span class="token string">'android.hardware.faketouch'</span>
+  uses-implied-feature: name<span class="token operator">=</span><span class="token string">'android.hardware.faketouch'</span> reason<span class="token operator">=</span><span class="token string">'default feature for all apps'</span>
+main
+supports-screens: <span class="token string">'small'</span> <span class="token string">'normal'</span> <span class="token string">'large'</span> <span class="token string">'xlarge'</span>
+supports-any-density: <span class="token string">'true'</span>
+locales: <span class="token string">'--_--'</span>
+densities: <span class="token string">'160'</span> <span class="token string">'240'</span> <span class="token string">'320'</span> <span class="token string">'480'</span> <span class="token string">'640'</span> <span class="token string">'65534'</span>
+</code></pre>
+<h4 id="permissions"><a href="#permissions" class="headerlink" title="permissions"></a>permissions</h4><pre class=" language-bash"><code class="language-bash">➜ aapt d permissions app/build/outputs/apk/debug/demo.apk
+package: cn.thismj.demo
+uses-permission: name<span class="token operator">=</span><span class="token string">'android.permission.WRITE_EXTERNAL_STORAGE'</span>
+uses-permission: name<span class="token operator">=</span><span class="token string">'android.permission.INTERNET'</span>
+</code></pre>
+<h4 id="resources"><a href="#resources" class="headerlink" title="resources"></a>resources</h4><pre class=" language-bash"><code class="language-bash">➜ aapt d resources app/build/outputs/apk/debug/demo.apk
+Package Groups <span class="token punctuation">(</span>1<span class="token punctuation">)</span>
+Package Group 0 id<span class="token operator">=</span>0x7f packageCount<span class="token operator">=</span>1 name<span class="token operator">=</span>cn.thismj.demo
+  Package 0 id<span class="token operator">=</span>0x7f name<span class="token operator">=</span>cn.thismj.demo
+    <span class="token function">type</span> 0 configCount<span class="token operator">=</span>1 entryCount<span class="token operator">=</span>57
+      spec resource 0x7f010000 cn.thismj.demo:attr/barrierAllowsGoneWidgets: flags<span class="token operator">=</span>0x00000000
+       <span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span>
+      spec resource 0x7f010038 cn.thismj.demo:attr/layout_optimizationLevel: flags<span class="token operator">=</span>0x00000000
+      config <span class="token punctuation">(</span>default<span class="token punctuation">)</span>:
+        resource 0x7f010000 cn.thismj.demo:attr/barrierAllowsGoneWidgets: <span class="token operator">&lt;</span>bag<span class="token operator">></span>
+        <span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span>
+        resource 0x7f010038 cn.thismj.demo:attr/layout_optimizationLevel: <span class="token operator">&lt;</span>bag<span class="token operator">></span>
+    <span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span>
+    <span class="token function">type</span> 8 configCount<span class="token operator">=</span>1 entryCount<span class="token operator">=</span>1
+      spec resource 0x7f090000 cn.thismj.demo:style/AppTheme: flags<span class="token operator">=</span>0x00000000
+      config <span class="token punctuation">(</span>default<span class="token punctuation">)</span>:
+        resource 0x7f090000 cn.thismj.demo:style/AppTheme: <span class="token operator">&lt;</span>bag<span class="token operator">></span>
+</code></pre>
+<h4 id="configurations"><a href="#configurations" class="headerlink" title="configurations"></a>configurations</h4><pre class=" language-bash"><code class="language-bash">➜ aapt d configurations app/build/outputs/apk/debug/demo.apk
+
+mdpi
+hdpi
+xhdpi
+xxhdpi
+xxxhdpi
+anydpi-v21
+</code></pre>
+<h4 id="xmltree"><a href="#xmltree" class="headerlink" title="xmltree"></a>xmltree</h4><pre class=" language-bash"><code class="language-bash">➜ aapt d xmltree app/build/outputs/apk/debug/demo.apk res/layout/activity_main.xml
+N: android<span class="token operator">=</span>http://schemas.android.com/apk/res/android
+  N: app<span class="token operator">=</span>http://schemas.android.com/apk/res-auto
+    E: android.support.constraint.ConstraintLayout <span class="token punctuation">(</span>line<span class="token operator">=</span>2<span class="token punctuation">)</span>
+      A: android:layout_width<span class="token punctuation">(</span>0x010100f4<span class="token punctuation">)</span><span class="token operator">=</span><span class="token punctuation">(</span>type 0x10<span class="token punctuation">)</span>0xffffffff
+      A: android:layout_height<span class="token punctuation">(</span>0x010100f5<span class="token punctuation">)</span><span class="token operator">=</span><span class="token punctuation">(</span>type 0x10<span class="token punctuation">)</span>0xffffffff
+      E: TextView <span class="token punctuation">(</span>line<span class="token operator">=</span>9<span class="token punctuation">)</span>
+        A: android:layout_width<span class="token punctuation">(</span>0x010100f4<span class="token punctuation">)</span><span class="token operator">=</span><span class="token punctuation">(</span>type 0x10<span class="token punctuation">)</span>0xfffffffe
+        A: android:layout_height<span class="token punctuation">(</span>0x010100f5<span class="token punctuation">)</span><span class="token operator">=</span><span class="token punctuation">(</span>type 0x10<span class="token punctuation">)</span>0xfffffffe
+        A: android:text<span class="token punctuation">(</span>0x0101014f<span class="token punctuation">)</span><span class="token operator">=</span><span class="token string">"Hello World!"</span> <span class="token punctuation">(</span>Raw: <span class="token string">"Hello World!"</span><span class="token punctuation">)</span>
+        A: app:layout_constraintBottom_toBottomOf<span class="token punctuation">(</span>0x7f01000c<span class="token punctuation">)</span><span class="token operator">=</span><span class="token punctuation">(</span>type 0x10<span class="token punctuation">)</span>0x0
+        A: app:layout_constraintLeft_toLeftOf<span class="token punctuation">(</span>0x7f01001f<span class="token punctuation">)</span><span class="token operator">=</span><span class="token punctuation">(</span>type 0x10<span class="token punctuation">)</span>0x0
+        A: app:layout_constraintRight_toRightOf<span class="token punctuation">(</span>0x7f010023<span class="token punctuation">)</span><span class="token operator">=</span><span class="token punctuation">(</span>type 0x10<span class="token punctuation">)</span>0x0
+        A: app:layout_constraintTop_toTopOf<span class="token punctuation">(</span>0x7f010028<span class="token punctuation">)</span><span class="token operator">=</span><span class="token punctuation">(</span>type 0x10<span class="token punctuation">)</span>0x0
+</code></pre>
+<h4 id="xmlstrings"><a href="#xmlstrings" class="headerlink" title="xmlstrings"></a>xmlstrings</h4><pre class=" language-bash"><code class="language-bash">➜ aapt d xmlstrings app/build/outputs/apk/debug/demo.apk res/layout/activity_main.xml
+String pool of 14 unique UTF-8 non-sorted strings, 14 entries and 0 styles using 436 bytes:
+String <span class="token comment" spellcheck="true">#0: layout_width</span>
+String <span class="token comment" spellcheck="true">#1: layout_height</span>
+String <span class="token comment" spellcheck="true">#2: text</span>
+String <span class="token comment" spellcheck="true">#3: layout_constraintBottom_toBottomOf</span>
+String <span class="token comment" spellcheck="true">#4: layout_constraintLeft_toLeftOf</span>
+String <span class="token comment" spellcheck="true">#5: layout_constraintRight_toRightOf</span>
+String <span class="token comment" spellcheck="true">#6: layout_constraintTop_toTopOf</span>
+String <span class="token comment" spellcheck="true">#7: Hello World!</span>
+String <span class="token comment" spellcheck="true">#8: TextView</span>
+String <span class="token comment" spellcheck="true">#9: android</span>
+String <span class="token comment" spellcheck="true">#10: android.support.constraint.ConstraintLayout</span>
+String <span class="token comment" spellcheck="true">#11: app</span>
+String <span class="token comment" spellcheck="true">#12: http://schemas.android.com/apk/res-auto</span>
+String <span class="token comment" spellcheck="true">#13: http://schemas.android.com/apk/res/android</span>
+</code></pre>
+<h3 id="命令-p-ackage"><a href="#命令-p-ackage" class="headerlink" title="命令 p[ackage]"></a>命令 p[ackage]</h3><p>Android项目的构建流程就是用这个命令来编译和打包资源文件的，这个命令比较复杂，可选参数也非常多，我们列举一些比较重要的参数如下表：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-f</td>
+<td style="text-align:left">强制覆盖已经存在的文件</td>
+</tr>
+<tr>
+<td style="text-align:left">-M</td>
+<td style="text-align:left">指定AndroidManifest文件的完整路径</td>
+</tr>
+<tr>
+<td style="text-align:left">-I</td>
+<td style="text-align:left">添加已经存在的资源包（一般是对应平台的系统资源包，可以添加多个）</td>
+</tr>
+<tr>
+<td style="text-align:left">-A</td>
+<td style="text-align:left">指定assets资源目录</td>
+</tr>
+<tr>
+<td style="text-align:left">-S</td>
+<td style="text-align:left">指定res资源目录（可以多个，从左到右优先级递减）</td>
+</tr>
+<tr>
+<td style="text-align:left">-J</td>
+<td style="text-align:left">指定生成R.java的目录</td>
+</tr>
+<tr>
+<td style="text-align:left">-m</td>
+<td style="text-align:left">在-J指定的目录下增加包名对应的目录</td>
+</tr>
+<tr>
+<td style="text-align:left">-F</td>
+<td style="text-align:left">指定生成资源包的路径（ZIP格式兼容文件）</td>
+</tr>
+<tr>
+<td style="text-align:left">-M</td>
+<td style="text-align:left">列出apk文件的资以及Android manifest的详细内容</td>
+</tr>
+</tbody>
+</table>
+<p>一般来说，一个Android项目会依赖很多Module和第三方库，这些依赖库也会包含自己的资源文件，所以在进行编译和打包资源文件之前，首先需要对资源进行合并。例如，对上面的Demo工程而言，如果我们想打一个debug的版本，那么Android Studio的Gradle插件在编译打包资源文件之前会先把所有资源合并到如下目录：</p>
+<pre class=" language-bash"><code class="language-bash">//res
+app<span class="token punctuation">(</span>主工程<span class="token punctuation">)</span>/build/intermediates/res/merged/debug  
+
+//AndroidManifest文件
+app<span class="token punctuation">(</span>主工程<span class="token punctuation">)</span>/build/intermediates/manifests/full/debug/AndroidManifest.xml
+</code></pre>
+<p>p命令比较复杂，我们可以用Demo工程来做一个简单的试验，首先尝试用p命令生成R.java文件：</p>
+<pre class=" language-bash"><code class="language-bash">➜ aapt p \
+-M app/build/intermediates/manifests/full/debug/AndroidManifest.xml \
+-I ~/Library/Android/sdk/platforms/android-28/android.jar \
+-A app/src/main/assets \
+-S app/build/intermediates/res/merged/debug/ \
+-J output \
+-m \
+-f
+</code></pre>
+<p>此时查看Demo工程目录output文件夹下生成的文件：</p>
+<pre class=" language-bash"><code class="language-bash">➜ tree output 
+output
+└── cn
+    └── thismj
+        └── demo
+            └── R.java
+
+3 directories, 1 <span class="token function">file</span>
+</code></pre>
+<p>继续用p命令编译打包生成资源包文件：</p>
+<pre class=" language-bash"><code class="language-bash">➜ aapt p \
+-M app/build/intermediates/manifests/full/debug/AndroidManifest.xml \
+-I ~/Library/Android/sdk/platforms/android-28/android.jar \
+-A app/src/main/assets \
+-S app/build/intermediates/res/merged/debug/ \
+-F output/resource-debug.ap_ \
+-f
+</code></pre>
+<p>再次查看output文件夹：</p>
+<pre class=" language-bash"><code class="language-bash">➜ tree output
+output
+├── cn
+│   └── thismj
+│       └── demo
+│           └── R.java
+└── resource-debug.ap_
+
+3 directories, 2 files
+</code></pre>
+<p>我们把生成的资源文件包resource-debug.ap_解压，查看里面的文件结构：</p>
+<pre class=" language-bash"><code class="language-bash">➜  resource-debug tree
+<span class="token keyword">.</span>
+├── AndroidManifest.xml
+├── assets
+│   └── assets.txt
+├── res
+│   ├── drawable-anydpi-v21
+│   │   └── ic_launcher_background.xml
+│   ├── drawable-hdpi-v4
+│   │   └── ic_launcher_background.png
+│   ├── drawable-ldpi-v4
+│   │   └── ic_launcher_background.png
+│   ├── drawable-mdpi-v4
+│   │   └── ic_launcher_background.png
+│   ├── drawable-xhdpi-v4
+│   │   └── ic_launcher_background.png
+│   ├── drawable-xxhdpi-v4
+│   │   └── ic_launcher_background.png
+│   ├── drawable-xxxhdpi-v4
+│   │   └── ic_launcher_background.png
+│   ├── layout
+│   │   └── activity_main.xml
+│   ├── mipmap-hdpi-v4
+│   │   ├── ic_launcher.png
+│   │   └── ic_launcher_round.png
+│   ├── mipmap-mdpi-v4
+│   │   ├── ic_launcher.png
+│   │   └── ic_launcher_round.png
+│   ├── mipmap-xhdpi-v4
+│   │   ├── ic_launcher.png
+│   │   └── ic_launcher_round.png
+│   ├── mipmap-xxhdpi-v4
+│   │   ├── ic_launcher.png
+│   │   └── ic_launcher_round.png
+│   ├── mipmap-xxxhdpi-v4
+│   │   ├── ic_launcher.png
+│   │   └── ic_launcher_round.png
+│   └── raw
+│       └── raw.txt
+└── resources.arsc
+
+16 directories, 22 files
+</code></pre>
+<h3 id="命令-r-emove"><a href="#命令-r-emove" class="headerlink" title="命令 r[emove]"></a>命令 r[emove]</h3><p>删除（.zip、.jar、.apk等）里面指定的文件，可选参数：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-v</td>
+<td style="text-align:left">输出详细信息（好像没什么用）</td>
+</tr>
+</tbody>
+</table>
+<p>删除上述p命令生成的资源包（resource-debug.ap_）中的某些文件：</p>
+<pre class=" language-bash"><code class="language-bash">➜ aapt r -v output/resource-debug.ap_ res/layout/activity_main.xml AndroidManifest.xml 
+</code></pre>
+<h3 id="命令-a-dd"><a href="#命令-a-dd" class="headerlink" title="命令 a[dd]"></a>命令 a[dd]</h3><p>添加文件到（.zip、.jar、.apk等），可选参数：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-v</td>
+<td style="text-align:left">输出详细信息（没什么用）</td>
+</tr>
+</tbody>
+</table>
+<p>添加一些文件到上述p命令生成的资源包（resource-debug.ap_）中。</p>
+<pre class=" language-bash"><code class="language-bash">➜ a apt a -v output/resource-debug.ap_ classes.dex Demo.iml 
+ <span class="token string">'classes.dex'</span><span class="token punctuation">..</span>.
+ <span class="token string">'Demo.iml'</span><span class="token punctuation">..</span>.
+</code></pre>
+<h3 id="命令-c-runch"><a href="#命令-c-runch" class="headerlink" title="命令 c[runch]"></a>命令 c[runch]</h3><p>对一个或多个资源文件夹下的PNG图片进行预处理（内部使用libpng库来解析PNG文件，用zlib库压缩生成新图片），该命令需要指定参数如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-S</td>
+<td style="text-align:left">指定源文件夹</td>
+</tr>
+<tr>
+<td style="text-align:left">-C</td>
+<td style="text-align:left">指定源文件预处理完成之后保存的文件夹</td>
+</tr>
+</tbody>
+</table>
+<p>在Mac系统下随便截了一张图，放在Demo工程的png目录，然后尝试用AAPT进行预处理，结果保存在Demo工程的output/result目录，结果如下：</p>
+<pre class=" language-bash"><code class="language-bash">➜ aapt c -v -S png -C output/result
+Crunching PNG Files <span class="token keyword">in</span> <span class="token function">source</span> dir: png
+To destination dir: output/result
+Processing image to cache: png/截图.png <span class="token operator">=</span><span class="token operator">></span> output/result/截图.png
+  <span class="token punctuation">(</span>processed image to cache entry output/result/截图.png: 67% size of source<span class="token punctuation">)</span>
+Crunched 1 PNG files to update cache
+</code></pre>
+<h3 id="命令-s-ingleCrunch"><a href="#命令-s-ingleCrunch" class="headerlink" title="命令 s[ingleCrunch]"></a>命令 s[ingleCrunch]</h3><p>仅仅对单张PNG图片进行预处理，该命令需要指定参数如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-i</td>
+<td style="text-align:left">PNG源文件路径</td>
+</tr>
+<tr>
+<td style="text-align:left">-o</td>
+<td style="text-align:left">PNG源文件预处理完成之后保存的路径</td>
+</tr>
+</tbody>
+</table>
+<pre class=" language-bash"><code class="language-bash">➜ aapt s -v -i png/截图.png -o output/result.png
+Crunching single PNG file: png/截图.png
+    Output file: output/result.png
+Processing image to cache: png/截图.png <span class="token operator">=</span><span class="token operator">></span> output/result.png
+  <span class="token punctuation">(</span>processed image to cache entry output/result.png: 67% size of source<span class="token punctuation">)</span>
+</code></pre>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上的实践，算是对 AAPT 有了一个初步的了解，知道了 AAPT 在整个 Android 项目构建流程中的主要职责。实际上，在 Android Gradle Plugin 3.0.0以上版本，已经默认使用 <a href="https://developer.android.com/studio/command-line/aapt2" target="_blank" rel="noopener">AAPT2</a> 了，AAPT2 为资源的增量编译提供了支持……</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ol>
+<li><a href="https://elinux.org/Android_aapt" target="_blank" rel="noopener">Android aapt</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1004331" target="_blank" rel="noopener">关于Android图片资源瘦身的奇思妙想</a></li>
+</ol>
+
+            </div>
+            <hr>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff;
+        background-color: #22AB38;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff;
+        background-color: #019FE8;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a class="reward-link btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs">
+                        <li class="tab wechat-tab waves-effect waves-light"><a class="active" href="#wechat">微信</a></li>
+                        <li class="tab alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                    </ul>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#reward .reward-link').on('click', function () {
+            $('#rewardModal').openModal();
+        });
+
+        $('#rewardModal .close').on('click', function () {
+            $('#rewardModal').closeModal();
+        });
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            <div class="reprint">
+                <p>
+                    <span class="reprint-tip">
+                        <i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;转载请注明:
+                    </span>
+                    <a href="http://yoursite.com" class="b-link-green">ThisMJ</a>
+                    <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
+                    <a href="/2019/03/06/aapt-ming-ling-xing-shi-yong-shi-jian/" class="b-link-green">AAPT命令行使用实践</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '8b46f7887f2b6352c693',
+        clientSecret: '788fa073b4ebd2c51f4b4a7b9258efee7cf51d22',
+        repo: 'thismj.github.io',
+        owner: 'thismj',
+        admin: ["thismj"],
+        id: '2019-03-06T17-45-11',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2019/03/06/aapt-ming-ling-xing-shi-yong-shi-jian/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="AAPT命令行使用实践">
+                        
+                        <span class="card-title">AAPT命令行使用实践</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">环境
+操作系统：Mac OS High Sierra 10.13.2 (17C88)
+Android SDK Build Tool版本：28.0.3
+
+AAPT是什么AAPT 即 Android Asset Packaging Tool，它</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-03-06
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Android/" class="post-category" target="_blank">
+                                    Android
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/AAPT/" target="_blank">
+                        <span class="chip bg-color">AAPT</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/02/14/qian-xi-zip-ge-shi/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="浅析ZIP格式">
+                        
+                        <span class="card-title">浅析ZIP格式</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">
+ZIP文件格式是一种数据压缩和文档储存的文件格式，原名Deflate，发明者为菲尔·卡茨（Phil Katz），他于1989年1月公布了该格式的资料。ZIP通常使用后缀名“.zip”，它的MIME格式为application/zip。
+
+</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-02-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/杂项/" class="post-category" target="_blank">
+                                    杂项
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/ZIP/" target="_blank">
+                        <span class="chip bg-color">ZIP</span>
+                    </a>
+                    
+                    <a href="/tags/压缩/" target="_blank">
+                        <span class="chip bg-color">压缩</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: ThisMJ<br />'
+            + '作者: ThisMJ<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+    </div>
+    <div class="col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            本站由&copy;<a href="https://github.com/thismj/" target="_blank">ThisMJ</a>基于
+            <a href="https://hexo.io/" target="_blank">Hexo</a> 的
+            <a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">hexo-theme-matery</a>主题搭建.
+
+            
+                &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
+                <span class="white-color">13.9k</span>
+            
+
+            
+			
+                <br>
+                
+                <span id="busuanzi_container_site_pv">
+                    <i class="fa fa-heart-o"></i>
+                    本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+                </span>
+                
+                
+                <span id="busuanzi_container_site_uv">
+                    <i class="fa fa-users"></i>
+                    次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+                </span>
+                
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/thismj" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:thiscrazymj@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input" autofocus>
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/js/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116677145-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-116677145-1');
+</script>
+
+
+
+    <script src="/libs/others/clicklove.js"></script>
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>
