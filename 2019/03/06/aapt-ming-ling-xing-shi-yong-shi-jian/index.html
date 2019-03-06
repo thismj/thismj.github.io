@@ -365,7 +365,7 @@ AAPT是什么AAPT 即 Android Asset Packaging Tool，它">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        3.3k
+                        3.4k
                     </div>
                     
 
@@ -954,11 +954,24 @@ Crunched 1 PNG files to update cache
 </tr>
 </tbody>
 </table>
+<p>把刚才的截图用s命令再处理一遍：</p>
 <pre class=" language-bash"><code class="language-bash">➜ aapt s -v -i png/截图.png -o output/result.png
 Crunching single PNG file: png/截图.png
     Output file: output/result.png
 Processing image to cache: png/截图.png <span class="token operator">=</span><span class="token operator">></span> output/result.png
   <span class="token punctuation">(</span>processed image to cache entry output/result.png: 67% size of source<span class="token punctuation">)</span>
+</code></pre>
+<p>又去瞟了一眼源码，发现还有这么个奇淫巧技：</p>
+<pre class=" language-bash"><code class="language-bash">➜ aapt m
+Ready
+s
+png/截图.png
+output/xx.png      
+Crunching png/截图.png
+Crunching single PNG file: png/截图.png
+    Output file: oxx.png
+Done
+quit
 </code></pre>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上的实践，算是对 AAPT 有了一个初步的了解，知道了 AAPT 在整个 Android 项目构建流程中的主要职责。实际上，在 Android Gradle Plugin 3.0.0以上版本，已经默认使用 <a href="https://developer.android.com/studio/command-line/aapt2" target="_blank" rel="noopener">AAPT2</a> 了，AAPT2 为资源的增量编译提供了支持……</p>
 <h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ol>
