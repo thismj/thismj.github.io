@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-03-06T10:51:45.202Z</updated>
+  <updated>2019-03-15T13:39:32.601Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,11 +17,37 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>AAPT源码分析(一)</title>
+    <link href="http://yoursite.com/2019/03/15/aapt-yuan-ma-fen-xi-yi/"/>
+    <id>http://yoursite.com/2019/03/15/aapt-yuan-ma-fen-xi-yi/</id>
+    <published>2019-03-15T13:20:21.000Z</published>
+    <updated>2019-03-15T13:39:32.601Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;通过 &lt;a
+        
+      
+    
+    </summary>
+    
+      <category term="Android" scheme="http://yoursite.com/categories/Android/"/>
+    
+    
+      <category term="AAPT" scheme="http://yoursite.com/tags/AAPT/"/>
+    
+  </entry>
+  
+  <entry>
     <title>AAPT命令行使用实践</title>
     <link href="http://yoursite.com/2019/03/06/aapt-ming-ling-xing-shi-yong-shi-jian/"/>
     <id>http://yoursite.com/2019/03/06/aapt-ming-ling-xing-shi-yong-shi-jian/</id>
     <published>2019-03-06T09:45:11.000Z</published>
-    <updated>2019-03-06T10:51:45.202Z</updated>
+    <updated>2019-03-15T13:34:47.169Z</updated>
     
     <summary type="html">
     
@@ -70,20 +96,6 @@
       <category term="ZIP" scheme="http://yoursite.com/tags/ZIP/"/>
     
       <category term="压缩" scheme="http://yoursite.com/tags/%E5%8E%8B%E7%BC%A9/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Android》之札记一</title>
-    <link href="http://yoursite.com/2019/01/24/gradle-for-android-zhi-zha-ji-yi/"/>
-    <id>http://yoursite.com/2019/01/24/gradle-for-android-zhi-zha-ji-yi/</id>
-    <published>2019-01-24T04:13:25.313Z</published>
-    <updated>2019-01-24T04:13:25.313Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
     
   </entry>
   

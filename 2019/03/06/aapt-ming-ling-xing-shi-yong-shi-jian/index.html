@@ -398,9 +398,6 @@ AAPT是什么AAPT 即 Android Asset Packaging Tool，它">
 </code></pre>
 <pre class=" language-bash"><code class="language-bash">AOSP/out/host/darwin-x86/bin/
 </code></pre>
-<p>如果想要知道AAPT的实现原理，可以在下面位置阅读相关的源码：</p>
-<pre class=" language-bash"><code class="language-bash">AOSP/frameworks/base/tools/aapt/
-</code></pre>
 <h2 id="AAPT命令行实践"><a href="#AAPT命令行实践" class="headerlink" title="AAPT命令行实践"></a>AAPT命令行实践</h2><p>在命令行直接输入aapt，不带任何参数，我们可以看到详细的帮助文档：</p>
 <pre class=" language-bash"><code class="language-bash">➜ ~ aapt
 Android Asset Packaging Tool
@@ -742,6 +739,10 @@ String <span class="token comment" spellcheck="true">#13: http://schemas.android
 </thead>
 <tbody>
 <tr>
+<td style="text-align:left">-v</td>
+<td style="text-align:left">输出详细信息（通过详细信息可以粗略分析aapt打包的流程）</td>
+</tr>
+<tr>
 <td style="text-align:left">-f</td>
 <td style="text-align:left">强制覆盖已经存在的文件</td>
 </tr>
@@ -774,8 +775,8 @@ String <span class="token comment" spellcheck="true">#13: http://schemas.android
 <td style="text-align:left">指定生成资源包的路径（ZIP格式兼容文件）</td>
 </tr>
 <tr>
-<td style="text-align:left">-M</td>
-<td style="text-align:left">列出apk文件的资以及Android manifest的详细内容</td>
+<td style="text-align:left">–max-res-version</td>
+<td style="text-align:left">如果指定为19，则类似drawable-v21的资源文件夹会被忽略</td>
 </tr>
 </tbody>
 </table>
@@ -1163,28 +1164,24 @@ quit
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
-            </div>
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/03/06/aapt-ming-ling-xing-shi-yong-shi-jian/">
+                <a href="/2019/03/15/aapt-yuan-ma-fen-xi-yi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="AAPT命令行使用实践">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="AAPT源码分析(一)">
                         
-                        <span class="card-title">AAPT命令行使用实践</span>
+                        <span class="card-title">AAPT源码分析(一)</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary">环境
-操作系统：Mac OS High Sierra 10.13.2 (17C88)
-Android SDK Build Tool版本：28.0.3
-
-AAPT是什么AAPT 即 Android Asset Packaging Tool，它</div>
+                    <div class="summary">前言通过 AAPT命令行使用实践，我们已经知道了如何去使用 aapt 这个工具。为了更详细地了解 aapt 的工作流程以及原理，我们接下来从源码的角度来分析一下，它是如何编译和打包项目资源文件的。aapt 相关源码的位置如下所示：
+AOSP</div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-03-06
-                            </span>
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-03-15
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
@@ -1197,7 +1194,6 @@ AAPT是什么AAPT 即 Android Asset Packaging Tool，它</div>
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
@@ -1363,7 +1359,7 @@ ZIP文件格式是一种数据压缩和文档储存的文件格式，原名Defla
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">14k</span>
+                <span class="white-color">15.2k</span>
             
 
             

@@ -1,0 +1,1072 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="AAPT源码分析(一), ThisMJ">
+    <meta name="description" content="前言通过 AAPT命令行使用实践，我们已经知道了如何去使用 aapt 这个工具。为了更详细地了解 aapt 的工作流程以及原理，我们接下来从源码的角度来分析一下，它是如何编译和打包项目资源文件的。aapt 相关源码的位置如下所示：
+AOSP">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>AAPT源码分析(一) | ThisMJ</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="container">
+            <div class="nav-wrapper">
+                <div class="brand-logo">
+                    <a href="/" class="waves-effect waves-light">
+                        
+                        <img src="/medias/logo.png" class="logo-img hide-on-small-only">
+                        
+                        <span class="logo-span">ThisMJ</span>
+                    </a>
+                </div>
+                
+
+<a href="#" data-activates="mobile-nav" class="button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li>
+        <a id="toggleSearch" class="waves-effect waves-light">
+            <i id="searchIcon" class="mdi-action-search" title="搜索"></i>
+        </a>
+    </li>
+
+</ul>
+
+<div class="side-nav" id="mobile-nav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">ThisMJ</div>
+        <div class="logo-desc">
+            
+            不忘初心，砥砺前行
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        
+    </ul>
+
+    <div class="social-link">
+    <a href="https://github.com/thismj" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:thiscrazymj@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+</div>
+
+            </div>
+        </div>
+
+        
+    </nav>
+</header>
+
+
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('嘿嘿嘿嘿，你知道密码不？')).toString(CryptoJS.enc.Hex)) {
+                alert('输得啥玩意儿。。。');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        AAPT源码分析(一)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1,
+    #articleContent h2,
+    #articleContent h3,
+    #articleContent h4,
+    #articleContent h5,
+    #articleContent h6 {
+        padding-top: 76px;
+        margin-top: -76px;
+    }
+
+    #articleContent h1 {
+        line-height: 3.5rem;
+    }
+
+    #articleContent h2 {
+        line-height: 3.2rem;
+    }
+
+    #articleContent h3 {
+        line-height: 2.8rem;
+    }
+
+    #articleContent h4 {
+        line-height: 2.5rem;
+    }
+
+    #articleContent h5 {
+        line-height: 2.2rem;
+    }
+
+    #articleContent h6 {
+        line-height: 1.9rem;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #f44336;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #f44336;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #f44336;
+    }
+</style>
+<div class="row">
+    <div class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/AAPT/" target="_blank">
+                                <span class="chip bg-color">AAPT</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Android/" class="post-category" target="_blank">
+                                Android
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2019-03-15
+                </div>
+
+                
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
+                        1.2k
+                    </div>
+                    
+
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                        5 分
+                    </div>
+                    
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>通过 <a href="http://thismj.cn/2019/03/06/aapt-ming-ling-xing-shi-yong-shi-jian/" target="_blank" rel="noopener">AAPT命令行使用实践</a>，我们已经知道了如何去使用 aapt 这个工具。为了更详细地了解 aapt 的工作流程以及原理，我们接下来从源码的角度来分析一下，它是如何编译和打包项目资源文件的。aapt 相关源码的位置如下所示：</p>
+<pre class=" language-bash"><code class="language-bash">AOSP/frameworks/base/tools/aapt/
+</code></pre>
+<h2 id="主函数-main"><a href="#主函数-main" class="headerlink" title="主函数 main()"></a>主函数 main()</h2><p>在终端执行 appt 命令，首先会进入到 Main.cpp 的 main()函数：</p>
+<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/*
+ * 解析参数
+ */</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span> <span class="token keyword">const</span> argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    Bundle bundle<span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'v'</span><span class="token punctuation">)</span>
+        bundle<span class="token punctuation">.</span><span class="token function">setCommand</span><span class="token punctuation">(</span>kCommandVersion<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'d'</span><span class="token punctuation">)</span>
+        bundle<span class="token punctuation">.</span><span class="token function">setCommand</span><span class="token punctuation">(</span>kCommandDump<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'l'</span><span class="token punctuation">)</span>
+        bundle<span class="token punctuation">.</span><span class="token function">setCommand</span><span class="token punctuation">(</span>kCommandList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'a'</span><span class="token punctuation">)</span>
+        bundle<span class="token punctuation">.</span><span class="token function">setCommand</span><span class="token punctuation">(</span>kCommandAdd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'r'</span><span class="token punctuation">)</span>
+        bundle<span class="token punctuation">.</span><span class="token function">setCommand</span><span class="token punctuation">(</span>kCommandRemove<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'p'</span><span class="token punctuation">)</span>
+        bundle<span class="token punctuation">.</span><span class="token function">setCommand</span><span class="token punctuation">(</span>kCommandPackage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'c'</span><span class="token punctuation">)</span>
+        bundle<span class="token punctuation">.</span><span class="token function">setCommand</span><span class="token punctuation">(</span>kCommandCrunch<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'s'</span><span class="token punctuation">)</span>
+        bundle<span class="token punctuation">.</span><span class="token function">setCommand</span><span class="token punctuation">(</span>kCommandSingleCrunch<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'m'</span><span class="token punctuation">)</span>
+        bundle<span class="token punctuation">.</span><span class="token function">setCommand</span><span class="token punctuation">(</span>kCommandDaemon<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token function">fprintf</span><span class="token punctuation">(</span><span class="token constant">stderr</span><span class="token punctuation">,</span> <span class="token string">"ERROR: Unknown command '%s'\n"</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        wantUsage <span class="token operator">=</span> true<span class="token punctuation">;</span>
+        <span class="token keyword">goto</span> bail<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>    
+</code></pre>
+<p>在 main() 函数里面，通过命令行传过来的参数列表（字符指针数组），首先判断出执行的命令，由代码可知，只要命令参数的第一个字符成功匹配即可，所以 “aapt v” 跟 “aapt vOJBK”是一样的。</p>
+<h2 id="Bundle-h-头文件"><a href="#Bundle-h-头文件" class="headerlink" title="Bundle.h 头文件"></a>Bundle.h 头文件</h2><p>这里有个比较重要的类Bundle，这个东西会贯穿在 aapt 的源码之中，它负责全局保存命令行参数列表解析的结果，如上，Bundle 通过 setCommand() 函数记录 aapt 的命令类型，kCommandVersion、kCommandPackage 等都是定义在 Bundle.h 头文件里面的枚举类型：</p>
+<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/*
+ * 命令枚举类型
+ */</span>
+<span class="token keyword">typedef</span> <span class="token keyword">enum</span> Command <span class="token punctuation">{</span>
+    kCommandUnknown <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token comment" spellcheck="true">//对应 v[ersion]命令</span>
+    kCommandVersion<span class="token punctuation">,</span>
+    kCommandList<span class="token punctuation">,</span>
+    kCommandDump<span class="token punctuation">,</span>
+    kCommandAdd<span class="token punctuation">,</span>
+    kCommandRemove<span class="token punctuation">,</span>
+    <span class="token comment" spellcheck="true">//对应 p[ackage]命令</span>
+    kCommandPackage<span class="token punctuation">,</span>
+    kCommandCrunch<span class="token punctuation">,</span>
+    <span class="token comment" spellcheck="true">//对应 s[ingleCrunch]命令</span>
+    kCommandSingleCrunch<span class="token punctuation">,</span>
+    kCommandDaemon
+<span class="token punctuation">}</span> Command<span class="token punctuation">;</span>
+</code></pre>
+<p>查看 Bundle 类的构造函数，每个变量都对应一个 aapt 的命令行参数：</p>
+<pre class=" language-c"><code class="language-c">public<span class="token punctuation">:</span>
+    <span class="token function">Bundle</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+        <span class="token punctuation">:</span> <span class="token function">mCmd</span><span class="token punctuation">(</span>kCommandUnknown<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mVerbose</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mAndroidList</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mForce</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mGrayscaleTolerance</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mMakePackageDirs</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mUpdate</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mExtending</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mRequireLocalization</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mPseudolocalize</span><span class="token punctuation">(</span>NO_PSEUDOLOCALIZATION<span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mWantUTF16</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mValues</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mIncludeMetaData</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mCompressionMethod</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mJunkPath</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mOutputAPKFile</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mManifestPackageNameOverride</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mInstrumentationPackageNameOverride</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mAutoAddOverlay</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mGenDependencies</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mNoVersionVectors</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mCrunchedOutputDir</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mProguardFile</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mMainDexProguardFile</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mAndroidManifestFile</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mPublicOutputFile</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mRClassDir</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mResourceIntermediatesDir</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mManifestMinSdkVersion</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mMinSdkVersion</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mTargetSdkVersion</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mMaxSdkVersion</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mVersionCode</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mVersionName</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mReplaceVersion</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mCustomPackage</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mExtraPackages</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mMaxResVersion</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mDebugMode</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mNonConstantId</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mSkipSymbolsWithoutDefaultLocalization</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mProduct</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mUseCrunchCache</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mErrorOnFailedInsert</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mErrorOnMissingConfigEntry</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mOutputTextSymbols</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mSingleCrunchInputFile</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mSingleCrunchOutputFile</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mBuildSharedLibrary</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mBuildAppAsSharedLibrary</span><span class="token punctuation">(</span>false<span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">mArgc</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mArgv</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token operator">~</span><span class="token function">Bundle</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+<p>判断完命令类型之后，main.cpp 的 main() 函数继续遍历解析参数列表，因为 aapt 的命令行参数众多，所以只截取部分代码片段如下：</p>
+<pre class=" language-c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span> <span class="token keyword">const</span> argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    Bundle bundle<span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    argc <span class="token operator">-</span><span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    argv <span class="token operator">+</span><span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">/*
+     * 遍历参数列表
+     */</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>argc <span class="token operator">&amp;&amp;</span> argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'-'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">/* 参数标记 */</span>
+        <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> cp <span class="token operator">=</span> argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">*</span>cp <span class="token operator">!=</span> <span class="token string">'\0'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">switch</span> <span class="token punctuation">(</span><span class="token operator">*</span>cp<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">case</span> <span class="token string">'v'</span><span class="token punctuation">:</span>
+                <span class="token comment" spellcheck="true">// -v 打印详细信息</span>
+                bundle<span class="token punctuation">.</span><span class="token function">setVerbose</span><span class="token punctuation">(</span>true<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            <span class="token keyword">case</span> <span class="token string">'F'</span><span class="token punctuation">:</span>
+                argc<span class="token operator">--</span><span class="token punctuation">;</span>
+                argv<span class="token operator">++</span><span class="token punctuation">;</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                <span class="token comment" spellcheck="true">// -F 保存资源打包文件的输出路径</span>
+                bundle<span class="token punctuation">.</span><span class="token function">setOutputAPKFile</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            <span class="token keyword">case</span> <span class="token string">'M'</span><span class="token punctuation">:</span>
+                argc<span class="token operator">--</span><span class="token punctuation">;</span>
+                argv<span class="token operator">++</span><span class="token punctuation">;</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                <span class="token comment" spellcheck="true">// -M 保存 AndroidManifest 文件的路径</span>
+                bundle<span class="token punctuation">.</span><span class="token function">setAndroidManifestFile</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token keyword">case</span> <span class="token string">'S'</span><span class="token punctuation">:</span>
+                argc<span class="token operator">--</span><span class="token punctuation">;</span>
+                argv<span class="token operator">++</span><span class="token punctuation">;</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                <span class="token comment" spellcheck="true">// -S 添加资源文件夹</span>
+                bundle<span class="token punctuation">.</span><span class="token function">addResourceSourceDir</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            <span class="token comment" spellcheck="true">//解析两条杠 -- 的参数</span>
+            <span class="token keyword">case</span> <span class="token string">'-'</span><span class="token punctuation">:</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>cp<span class="token punctuation">,</span> <span class="token string">"-debug-mode"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token comment" spellcheck="true">// --debug-mode 开启 debug 模式</span>
+                    bundle<span class="token punctuation">.</span><span class="token function">setDebugMode</span><span class="token punctuation">(</span>true<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>cp<span class="token punctuation">,</span> <span class="token string">"-max-res-version"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    argc<span class="token operator">--</span><span class="token punctuation">;</span>
+                    argv<span class="token operator">++</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                    <span class="token comment" spellcheck="true">// --max-res-version 如果指定为19，则类似drawable-v21的资源文件夹会被忽略</span>
+                    bundle<span class="token punctuation">.</span><span class="token function">setMaxResVersion</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                                              
+                <span class="token punctuation">}</span> 
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>cp<span class="token punctuation">,</span> <span class="token string">"-auto-add-overlay"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token comment" spellcheck="true">//添加 overlay 独有的资源</span>
+                    bundle<span class="token punctuation">.</span><span class="token function">setAutoAddOverlay</span><span class="token punctuation">(</span>true<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>cp<span class="token punctuation">,</span> <span class="token string">"-no-crunch"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token comment" spellcheck="true">//不对 PNG 进行预处理</span>
+                    bundle<span class="token punctuation">.</span><span class="token function">setUseCrunchCache</span><span class="token punctuation">(</span>true<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span> 
+            cp<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        argc<span class="token operator">--</span><span class="token punctuation">;</span>
+        argv<span class="token operator">++</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    result <span class="token operator">=</span> <span class="token function">handleCommand</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>bundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>需要注意一下 -S 这个参数，-S 可以指定多个资源文件夹，Bundle 用一个 类型为 Vector 的 mResourceSourceDirs 变量来保存，通过 addResourceSourceDir() 函数倒序添加这些指定的资源文件夹：</p>
+<pre class=" language-c"><code class="language-c">class Bundle <span class="token punctuation">{</span>
+public<span class="token punctuation">:</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">const</span> android<span class="token punctuation">:</span><span class="token punctuation">:</span>Vector<span class="token operator">&lt;</span><span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span><span class="token operator">></span><span class="token operator">&amp;</span> <span class="token function">getResourceSourceDirs</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> mResourceSourceDirs<span class="token punctuation">;</span> 
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">void</span> <span class="token function">addResourceSourceDir</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> dir<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//倒序添加，假设命令行依次指定了三个 -S 路径参数，分别为 A、B、C  </span>
+        <span class="token comment" spellcheck="true">//则 A 为 base 资源包，B 是 C 的 overlay 资源包，A 是 B 的 overlay 资源包</span>
+        mResourceSourceDirs<span class="token punctuation">.</span><span class="token function">insertAt</span><span class="token punctuation">(</span>dir<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    <span class="token punctuation">}</span>
+   <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+private<span class="token punctuation">:</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    android<span class="token punctuation">:</span><span class="token punctuation">:</span>Vector<span class="token operator">&lt;</span><span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span><span class="token operator">></span> mResourceSourceDirs<span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> 
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="handleCommand"><a href="#handleCommand" class="headerlink" title="handleCommand()"></a>handleCommand()</h2><p>参数列表解析完成后，都全局保存在了 bundle 变量中，接着进入 Main.cpp 的 handleCommand() 函数，分发不同的命令类型：</p>
+<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/*
+ * 分发命令.
+ */</span>
+<span class="token keyword">int</span> <span class="token function">handleCommand</span><span class="token punctuation">(</span>Bundle<span class="token operator">*</span> bundle<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">switch</span> <span class="token punctuation">(</span>bundle<span class="token operator">-></span><span class="token function">getCommand</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">case</span> kCommandVersion<span class="token punctuation">:</span>      <span class="token keyword">return</span> <span class="token function">doVersion</span><span class="token punctuation">(</span>bundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">case</span> kCommandList<span class="token punctuation">:</span>         <span class="token keyword">return</span> <span class="token function">doList</span><span class="token punctuation">(</span>bundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">case</span> kCommandDump<span class="token punctuation">:</span>         <span class="token keyword">return</span> <span class="token function">doDump</span><span class="token punctuation">(</span>bundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">case</span> kCommandAdd<span class="token punctuation">:</span>          <span class="token keyword">return</span> <span class="token function">doAdd</span><span class="token punctuation">(</span>bundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">case</span> kCommandRemove<span class="token punctuation">:</span>       <span class="token keyword">return</span> <span class="token function">doRemove</span><span class="token punctuation">(</span>bundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">case</span> kCommandPackage<span class="token punctuation">:</span>      <span class="token keyword">return</span> <span class="token function">doPackage</span><span class="token punctuation">(</span>bundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">case</span> kCommandCrunch<span class="token punctuation">:</span>       <span class="token keyword">return</span> <span class="token function">doCrunch</span><span class="token punctuation">(</span>bundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">case</span> kCommandSingleCrunch<span class="token punctuation">:</span> <span class="token keyword">return</span> <span class="token function">doSingleCrunch</span><span class="token punctuation">(</span>bundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">case</span> kCommandDaemon<span class="token punctuation">:</span>       <span class="token keyword">return</span> <span class="token function">runInDaemonMode</span><span class="token punctuation">(</span>bundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">default</span><span class="token punctuation">:</span>
+        <span class="token function">fprintf</span><span class="token punctuation">(</span><span class="token constant">stderr</span><span class="token punctuation">,</span> <span class="token string">"%s: requested command not yet supported\n"</span><span class="token punctuation">,</span> gProgName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>根据不同的命令类型，调用不同的函数流程，比如 p 命令则执行 doPackage() 函数。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这篇主要分析了 aapt 命令行参数是如何进行解析的，涉及到的东西也比较简单。因为我们主要是想弄清楚 aapt 编译和打包项目资源文件的流程，所以，下一篇将从 doPackage() 函数开始，继续分析后续的流程。</p>
+
+            </div>
+            <hr>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff;
+        background-color: #22AB38;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff;
+        background-color: #019FE8;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a class="reward-link btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs">
+                        <li class="tab wechat-tab waves-effect waves-light"><a class="active" href="#wechat">微信</a></li>
+                        <li class="tab alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                    </ul>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#reward .reward-link').on('click', function () {
+            $('#rewardModal').openModal();
+        });
+
+        $('#rewardModal .close').on('click', function () {
+            $('#rewardModal').closeModal();
+        });
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            <div class="reprint">
+                <p>
+                    <span class="reprint-tip">
+                        <i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;转载请注明:
+                    </span>
+                    <a href="http://yoursite.com" class="b-link-green">ThisMJ</a>
+                    <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
+                    <a href="/2019/03/15/aapt-yuan-ma-fen-xi-yi/" class="b-link-green">AAPT源码分析(一)</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '8b46f7887f2b6352c693',
+        clientSecret: '788fa073b4ebd2c51f4b4a7b9258efee7cf51d22',
+        repo: 'thismj.github.io',
+        owner: 'thismj',
+        admin: ["thismj"],
+        id: '2019-03-15T21-20-21',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2019/03/15/aapt-yuan-ma-fen-xi-yi/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="AAPT源码分析(一)">
+                        
+                        <span class="card-title">AAPT源码分析(一)</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">前言通过 AAPT命令行使用实践，我们已经知道了如何去使用 aapt 这个工具。为了更详细地了解 aapt 的工作流程以及原理，我们接下来从源码的角度来分析一下，它是如何编译和打包项目资源文件的。aapt 相关源码的位置如下所示：
+AOSP</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-03-15
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Android/" class="post-category" target="_blank">
+                                    Android
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/AAPT/" target="_blank">
+                        <span class="chip bg-color">AAPT</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/03/06/aapt-ming-ling-xing-shi-yong-shi-jian/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="AAPT命令行使用实践">
+                        
+                        <span class="card-title">AAPT命令行使用实践</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">环境
+操作系统：Mac OS High Sierra 10.13.2 (17C88)
+Android SDK Build Tool版本：28.0.3
+
+AAPT是什么AAPT 即 Android Asset Packaging Tool，它</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-03-06
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Android/" class="post-category" target="_blank">
+                                    Android
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/AAPT/" target="_blank">
+                        <span class="chip bg-color">AAPT</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: ThisMJ<br />'
+            + '作者: ThisMJ<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+    </div>
+    <div class="col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            本站由&copy;<a href="https://github.com/thismj/" target="_blank">ThisMJ</a>基于
+            <a href="https://hexo.io/" target="_blank">Hexo</a> 的
+            <a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">hexo-theme-matery</a>主题搭建.
+
+            
+                &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
+                <span class="white-color">15.2k</span>
+            
+
+            
+			
+                <br>
+                
+                <span id="busuanzi_container_site_pv">
+                    <i class="fa fa-heart-o"></i>
+                    本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+                </span>
+                
+                
+                <span id="busuanzi_container_site_uv">
+                    <i class="fa fa-users"></i>
+                    次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+                </span>
+                
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/thismj" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:thiscrazymj@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input" autofocus>
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/js/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116677145-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-116677145-1');
+</script>
+
+
+
+    <script src="/libs/others/clicklove.js"></script>
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>
