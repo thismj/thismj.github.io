@@ -110,6 +110,6 @@ deploy:
   type: git
   repo: git@github.com:thismj/thismj.github.io.git
   branch: [master]
-  message: 更新文章 AAPT源码分析(一)
+  message: 更新文章 RxJava-理解响应式编程
   name: [ThisMJ]
   email: [thiscrazymj@gmail.com]
