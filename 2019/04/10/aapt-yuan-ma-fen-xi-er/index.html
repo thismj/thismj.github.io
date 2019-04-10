@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="keywords" content="AAPT源码分析（二）, ThisMJ">
     <meta name="description" content="准备此篇接着 AAPT源码分析（一） 继续分析 AAPT 的资源编译打包流程。
-在资源编译之前，首先需要收集所有有效的资源文件，AAPT 用一个 AaptAssets 对象来描述收集到的资源集合。AaptAssets 类继承于 AaptDi">
+在资源编译之前，首先需要收集所有有效的资源文件，AAPT 用一个 AaptAssets 对象来描述收集到的资源文件集合。AaptAssets 类继承于 Aapt">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -386,7 +386,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>此篇接着 <a href="http://thismj.cn/2019/03/15/aapt-yuan-ma-fen-xi-yi/" target="_blank" rel="noopener">AAPT源码分析（一）</a> 继续分析 AAPT 的资源编译打包流程。</p>
-<p>在资源编译之前，首先需要收集所有有效的资源文件，AAPT 用一个 AaptAssets 对象来描述收集到的资源集合。AaptAssets 类继承于 AaptDir 类，是一种树的递归层级结构。我们先看一下涉及到相关类的类图：</p>
+<p>在资源编译之前，首先需要收集所有有效的资源文件，AAPT 用一个 AaptAssets 对象来描述收集到的资源文件集合。AaptAssets 类继承于 AaptDir 类，是一种树的递归层级结构。我们先看一下涉及到相关类的类图：</p>
 <img src="http://www.plantuml.com/plantuml/svg/ZLHTQ-Cm47pthn3qBTI5ta499fYMfZrAENfSIb-B8cyJ4Laoqlh0xTr_xqfoRSlzuFmIlBipenbjVEwGMsnhbRc3r0stl6RMjBeIncgmR3cfRxaux4BpqYXZsT6rVwuc4xNHHkojgO6XRI7BXEBEiGlUu5hQbupbzRLKu0gsXYVUAho53ge746ZiQeDMwjtocBbcvH4_IAefImyYyFzXQ90G_oQw5yu1kY0T2AyqGVm9DiRYm3Fe-NOND7-3YxBzIA90_HijL5j15GKA5dv_SirtO7t_xWzOnRlYxMXnxeswO9_PeAPfhO3xhe4DO5ak278I7Z8sSHREIyQ6BliotjJYa9W7XCZcp64ivFRBtosHNXhz97ThSCBA1gNHIT2Ug1_7FSKRBIMvKnWfVH_6u7SAcrl-AAzqKrx6uLc8ayux4odgdcyLF8em5Dm8KR1MQZmzUqJ_hjDtPGHN44lVluMIeVtIo3rth2z36KqhzgGAa9Ghq4vYbv0UeDiQRglfN4Hkv7CgHalc1g6-DYOtoOoj_kRvF9TiN4os-AJjxvNbUJc_klxF47b7dcmMOko_NvsKBGXyFDJhBqRz4JlKwI1PTWwweY_PAm00">
 <p>上面类图中有一些 Android 源码里面定义的集合和工具类，其中，KeyedVector 是 Android 封装的一种用来储存 Key-Value 格式的数据结构，类似于 Java 的 Map，但是内部是通过动态数组来实现的；DefaultKeyedVector 继承于 KeyedVector，当找不到对应的 Key 时，会返回一个设定的默认值；sp 是 Android 提供的一种智能指针，在普通指针上加了一层封装，通过引用计数法来自动管理内存的回收。</p>
 <p>在分析源码之前，我们需要对上图中相关的类以及其成员变量做一个说明，以此来了解一个 AaptAssets 对象是如何记录收集到的资源文件的。</p>
@@ -1372,7 +1372,7 @@ ssize_t AaptAssets<span class="token punctuation">:</span><span class="token pun
                 </a>
                 <div class="card-content article-content">
                     <div class="summary">准备此篇接着 AAPT源码分析（一） 继续分析 AAPT 的资源编译打包流程。
-在资源编译之前，首先需要收集所有有效的资源文件，AAPT 用一个 AaptAssets 对象来描述收集到的资源集合。AaptAssets 类继承于 AaptDi</div>
+在资源编译之前，首先需要收集所有有效的资源文件，AAPT 用一个 AaptAssets 对象来描述收集到的资源文件集合。AaptAssets 类继承于 Aapt</div>
                     <div class="publish-info">
                             <span class="publish-date">
                                 <i class="fa fa-clock-o fa-fw icon-date"></i>2019-04-10
