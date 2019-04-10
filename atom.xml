@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-03-27T02:12:43.386Z</updated>
+  <updated>2019-04-10T10:52:42.877Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>AAPT源码分析（二）</title>
+    <link href="http://yoursite.com/2019/04/10/aapt-yuan-ma-fen-xi-er/"/>
+    <id>http://yoursite.com/2019/04/10/aapt-yuan-ma-fen-xi-er/</id>
+    <published>2019-04-10T10:50:23.000Z</published>
+    <updated>2019-04-10T10:52:42.877Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;准备&quot;&gt;&lt;a href=&quot;#准备&quot; class=&quot;headerlink&quot; title=&quot;准备&quot;&gt;&lt;/a&gt;准备&lt;/h2&gt;&lt;p&gt;此篇接着 &lt;a href=&quot;http://thismj.cn/2019/03/15/aapt-yuan-ma-fen-xi-yi/&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="Android" scheme="http://yoursite.com/categories/Android/"/>
+    
+    
+      <category term="AAPT" scheme="http://yoursite.com/tags/AAPT/"/>
+    
+  </entry>
   
   <entry>
     <title>RxJava-理解响应式编程</title>
