@@ -96,6 +96,15 @@ AAPT是什么AAPT 即 Android Asset Packaging Tool，它">
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/friends" class="waves-effect waves-light">
+            
+            <i class="fa fa-address-book"></i>
+            
+            <span>友情链接</span>
+        </a>
+    </li>
+    
     <li>
         <a id="toggleSearch" class="waves-effect waves-light">
             <i id="searchIcon" class="mdi-action-search" title="搜索"></i>
@@ -164,6 +173,15 @@ AAPT是什么AAPT 即 Android Asset Packaging Tool，它">
                 <i class="fa fa-fw fa-user-circle-o"></i>
                 
                 关于
+            </a>
+        </li>
+        
+        <li>
+            <a href="/friends" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-address-book"></i>
+                
+                友情链接
             </a>
         </li>
         
@@ -748,7 +766,7 @@ String <span class="token comment" spellcheck="true">#13: http://schemas.android
 </tr>
 <tr>
 <td style="text-align:left">-M</td>
-<td style="text-align:left">指定AndroidManifest文件的完整路径</td>
+<td style="text-align:left">指定 AndroidManifest 文件的完整路径</td>
 </tr>
 <tr>
 <td style="text-align:left">-I</td>
@@ -756,15 +774,15 @@ String <span class="token comment" spellcheck="true">#13: http://schemas.android
 </tr>
 <tr>
 <td style="text-align:left">-A</td>
-<td style="text-align:left">指定assets资源目录</td>
+<td style="text-align:left">指定 assets 资源目录</td>
 </tr>
 <tr>
 <td style="text-align:left">-S</td>
-<td style="text-align:left">指定res资源目录（可以多个，从左到右优先级递减）</td>
+<td style="text-align:left">指定 res 资源目录（可以多个，从左到右优先级递减）</td>
 </tr>
 <tr>
 <td style="text-align:left">-J</td>
-<td style="text-align:left">指定生成R.java的目录</td>
+<td style="text-align:left">指定生成 R.java 的目录</td>
 </tr>
 <tr>
 <td style="text-align:left">-m</td>
@@ -776,7 +794,11 @@ String <span class="token comment" spellcheck="true">#13: http://schemas.android
 </tr>
 <tr>
 <td style="text-align:left">–max-res-version</td>
-<td style="text-align:left">如果指定为19，则类似drawable-v21的资源文件夹会被忽略</td>
+<td style="text-align:left">如果指定为 19 ，则类似 drawable-v21 的资源文件夹会被忽略</td>
+</tr>
+<tr>
+<td style="text-align:left">–no-crunch</td>
+<td style="text-align:left">不预处理 PNG 资源图片</td>
 </tr>
 </tbody>
 </table>
@@ -909,7 +931,7 @@ output
  <span class="token string">'classes.dex'</span><span class="token punctuation">..</span>.
  <span class="token string">'Demo.iml'</span><span class="token punctuation">..</span>.
 </code></pre>
-<h3 id="命令-c-runch"><a href="#命令-c-runch" class="headerlink" title="命令 c[runch]"></a>命令 c[runch]</h3><p>对一个或多个资源文件夹下的PNG图片进行预处理（内部使用libpng库来解析PNG文件，用zlib库压缩生成新图片），该命令需要指定参数如下：</p>
+<h3 id="命令-c-runch"><a href="#命令-c-runch" class="headerlink" title="命令 c[runch]"></a>命令 c[runch]</h3><p>对一个或多个资源文件夹下的PNG图片进行预处理（内部使用 libpng 库来解析 PNG 文件，用 zlib 库压缩生成新图片），该命令需要指定参数如下：</p>
 <table>
 <thead>
 <tr>
@@ -928,7 +950,7 @@ output
 </tr>
 </tbody>
 </table>
-<p>在Mac系统下随便截了一张图，放在Demo工程的png目录，然后尝试用AAPT进行预处理，结果保存在Demo工程的output/result目录，结果如下：</p>
+<p>在 Mac 系统下随便截了一张图，放在 Demo 工程的 png 目录，然后尝试用 AAPT 进行预处理，结果保存在 Demo 工程的 output/result 目录，结果如下：</p>
 <pre class=" language-bash"><code class="language-bash">➜ aapt c -v -S png -C output/result
 Crunching PNG Files <span class="token keyword">in</span> <span class="token function">source</span> dir: png
 To destination dir: output/result
@@ -936,7 +958,7 @@ Processing image to cache: png/截图.png <span class="token operator">=</span><
   <span class="token punctuation">(</span>processed image to cache entry output/result/截图.png: 67% size of source<span class="token punctuation">)</span>
 Crunched 1 PNG files to update cache
 </code></pre>
-<h3 id="命令-s-ingleCrunch"><a href="#命令-s-ingleCrunch" class="headerlink" title="命令 s[ingleCrunch]"></a>命令 s[ingleCrunch]</h3><p>仅仅对单张PNG图片进行预处理，该命令需要指定参数如下：</p>
+<h3 id="命令-s-ingleCrunch"><a href="#命令-s-ingleCrunch" class="headerlink" title="命令 s[ingleCrunch]"></a>命令 s[ingleCrunch]</h3><p>仅仅对单张 PNG 图片进行预处理，该命令需要指定参数如下：</p>
 <table>
 <thead>
 <tr>
@@ -955,7 +977,7 @@ Crunched 1 PNG files to update cache
 </tr>
 </tbody>
 </table>
-<p>把刚才的截图用s命令再处理一遍：</p>
+<p>把刚才的截图用 s 命令再处理一遍：</p>
 <pre class=" language-bash"><code class="language-bash">➜ aapt s -v -i png/截图.png -o output/result.png
 Crunching single PNG file: png/截图.png
     Output file: output/result.png
