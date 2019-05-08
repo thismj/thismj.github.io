@@ -110,6 +110,6 @@ deploy:
   type: git
   repo: git@github.com:thismj/thismj.github.io.git
   branch: [master]
-  message: 更新文章 RxJava-理解响应式编程
+  message: 增加友情链接，把自己的GitBook放了上去
   name: [ThisMJ]
   email: [thiscrazymj@gmail.com]
